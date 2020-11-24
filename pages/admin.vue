@@ -89,8 +89,26 @@
         </template>
       </v-breadcrumbs>
       <!-- 界面内容显示区域 -->
+
       <div>
         <transition mode="out-in">
+
+          <v-row v-if="loading">
+            <v-col cols="12" md="4">
+              <v-skeleton-loader v-bind="attrs" type="card-avatar, article, actions"></v-skeleton-loader>
+              <v-skeleton-loader v-bind="attrs" type="date-picker"></v-skeleton-loader>
+            </v-col>
+
+            <v-col cols="12" md="4">
+              <v-skeleton-loader v-bind="attrs" type="article, actions"></v-skeleton-loader>
+              <v-skeleton-loader v-bind="attrs" type="table-heading, list-item-two-line, image, table-tfoot"></v-skeleton-loader>
+            </v-col>
+
+            <v-col cols="12" md="4">
+              <v-skeleton-loader v-bind="attrs" type="list-item-avatar, divider, list-item-three-line, card-heading, image, actions"></v-skeleton-loader>
+              <v-skeleton-loader v-bind="attrs" type="list-item-avatar-three-line, image, article"></v-skeleton-loader>
+            </v-col>
+          </v-row>
           <router-view/>
         </transition>
       </div>
@@ -111,6 +129,11 @@
     },
     data: () => ({
       drawer: null,
+      attrs: {
+        class: 'mb-2',
+        boilerplate: false,
+        elevation: 2,
+      },
       menuMap: [],
       user_name: 'admin',
       loading: false,
@@ -267,13 +290,16 @@
         disabled: false,
         href: menu.children[0].url
       }
+      this.loading = true;
       this.$http.get('/user/verify')
         .then(res => {
           //console.log('登录有效', res.data)
           this.user_name = res.data.data.nickname
           localStorage.setItem('user_info', JSON.stringify(res.data.data))
           this.getTheme(res.data.data.userId)
+          this.loading = false;
         }).catch(e => {
+        this.loading = false;
         console.log('登录失败', e)
         this.$router.push('/user/login')
       })

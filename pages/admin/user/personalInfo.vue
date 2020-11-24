@@ -101,7 +101,7 @@
             <v-tabs-items v-model="tablemodel">
               <v-tab-item>
                 <v-flex class="d-flex flex-column mx-6">
-                  <v-text-field style="max-width: 260px" label="昵称 (不作为登录使用)"></v-text-field>
+                  <v-text-field style="max-width: 260px" label="昵称 (不作为登录使用)" v-model="user_info.nickname"></v-text-field>
                   <v-text-field style="max-width: 260px" label="手机号"></v-text-field>
 
                   <v-flex class="d-flex flex-row" style="align-items: center">
@@ -109,6 +109,7 @@
                     <v-radio-group v-model="sex" row style="max-width: 260px">
                       <v-radio label="男" value="0" color="primary"></v-radio>
                       <v-radio label="女" value="1" color="primary"></v-radio>
+                      <v-radio label="未知" value="2" color="primary"></v-radio>
                     </v-radio-group>
                   </v-flex>
 
@@ -154,7 +155,7 @@
                 },],
                 user_info: '',
                 updateInfoDialog: false,
-                sex: '',
+                sex: 2,
                 pageNum: 1,
                 pageCount: 0,
                 headers: [

@@ -167,7 +167,7 @@
                     <v-icon left small>mdi-refresh</v-icon>
                     换一批
                   </v-btn>
-                  <v-btn color="red" tile dark @click="bottomSheet = false">
+                  <v-btn color="red" tile dark @click="()=>{bottomSheet = false;bingIdx=0}">
                     <v-icon left small>mdi-close</v-icon>
                     关闭
                   </v-btn>
@@ -237,7 +237,7 @@
                 bingImagePage: 1,
                 bingImages: [],
                 bingLoading: false,
-                bingIdx: 0,
+                bingIdx: 1,
                 headers:"",
                 uploadImageUrl: "",
             }
@@ -318,9 +318,12 @@
             async getBingImages() {
                 try {
                     this.bingLoading = true;
-                    let resp = await this.$http.get("/upload/bing_image?idx=" + this.bingIdx);
+                    let resp = await this.$http.get("/upload/bingImage?pageNum=" + this.bingIdx + "&pageSize=8");
                     console.log("获取bing图片", resp.data.data);
-                    this.bingImages = resp.data.data.images;
+                    this.bingImages = resp.data.data.images.data;
+                    if(this.bingImages.length <=0 && this.bingIdx !== 1){
+                      this.bingIdx = 1;
+                    }
                 } catch (e) {
                     console.log("获取bing图片失败", e.response.data);
                     this.snackbar = true;
