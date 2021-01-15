@@ -99,14 +99,14 @@
                        clickMode="push"  color="#ef0078" style="z-index:0;" :particlesNumber="100">
        </vue-particles>
      </div>-->
-    <v-dialog v-model="this.$store.getters.getLoadingState" hide-overlay persistent width="300">
+<!--    <v-dialog v-model="this.$store.getters.getLoadingState" hide-overlay persistent width="300">
       <v-card color="primary" dark>
         <v-card-text>
           请求数据中...
           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
         </v-card-text>
       </v-card>
-    </v-dialog>
+    </v-dialog>-->
   </v-app>
 </template>
 

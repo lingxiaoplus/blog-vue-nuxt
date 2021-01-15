@@ -39,7 +39,7 @@
                   hide-default-footer class="elevation-1">
       <template v-slot:item.labels="{ item }">
         <v-chip-group mandatory>
-          <v-chip v-for="label in item.labels" :key="label.id" small :color="getColor(label.id)" dark text-color="white">{{label.description}}</v-chip>
+          <v-chip v-for="label in item.labels" :key="label.id" small :color="getColor(label.id)" dark text-color="white">{{label.name}}</v-chip>
         </v-chip-group>
       </template>
 
@@ -49,7 +49,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-chip @click="dialog = true" v-bind="attrs" v-on="on" small :color="getColor(item.status.code)" dark text-color="white">{{item.status.name}}</v-chip>
           </template>
-          <span>点击发布文章</span>
+          <span>{{item.status.code==0?'点击发布文章':'点击移动到草稿箱'}}</span>
           <v-dialog v-model="dialog" max-width="290">
             <v-card>
               <v-card-title class="headline">提示</v-card-title>
@@ -115,8 +115,8 @@
         pageCount: 0,
         itemsPerPage: 10,
         keyword: '',
-        pageSize: 5,
-        pageSizes: [5, 10, 15, 20, 25, 30],
+        pageSize: 10,
+        pageSizes: [10, 15, 20, 25, 30],
         headers: [
           {
             text: '标题',

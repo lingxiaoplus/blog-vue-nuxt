@@ -1,35 +1,52 @@
 <template>
   <div>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <v-card :elevation="0">
-      <v-card-actions>
-        <v-flex class="d-flex" style="align-items: center; justify-content: center;flex-direction: row">
-          <v-icon medium>mdi-label-multiple</v-icon>
-          <span class="font-weight-medium" style="font-size: 26px">文章标签</span>
-        </v-flex>
-      </v-card-actions>
-      <v-card-text>
-        <v-row justify="space-around">
-          <v-col cols="12" sm="6" md="4" lg="6">
-            <v-sheet elevation="2" class="pa-2">
-              <v-chip-group column>
-                <v-chip v-for="(tag,index) in tags" :key="tag.id" dark :color="colorList[index]" label class="ma-2">
-                  {{ tag.name }}
-                </v-chip>
-              </v-chip-group>
-            </v-sheet>
-          </v-col>
-        </v-row>
-      </v-card-text>
+<!--    <v-container v-show="loading">
+      <v-row>
+        <v-col cols="12">
+          <v-skeleton-loader type="card" ></v-skeleton-loader>
+        </v-col>
 
-    </v-card>
+        <v-col cols="12">
+          <v-skeleton-loader
+            type="article, actions"
+          ></v-skeleton-loader>
+        </v-col>
+      </v-row>
+    </v-container>-->
+    <v-sheet >
+      <v-card :elevation="0">
+        <v-card-actions>
+          <v-flex class="d-flex" style="align-items: center; justify-content: center;flex-direction: row">
+            <v-icon medium>mdi-label-multiple</v-icon>
+            <span class="font-weight-medium" style="font-size: 26px">文章标签</span>
+          </v-flex>
+        </v-card-actions>
+        <v-card-text>
+          <v-row justify="space-around">
+            <v-col cols="12" sm="6" md="4" lg="6">
+              <v-sheet elevation="2" class="pa-2">
+                <v-chip-group column>
+                  <v-chip v-for="(tag,index) in tags" :key="tag.id" dark :color="colorList[index]" label class="ma-2">
+                    {{ tag.name }}
+                  </v-chip>
+                </v-chip-group>
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-card-text>
+
+      </v-card>
 
 
-    <v-card class="overflow-hidden" tile :elevation="0">
-      <v-card-text>
-        <div ref="cloud" style="width: 100%;height:300px"></div>
-      </v-card-text>
-    </v-card>
+      <v-card class="overflow-hidden" tile :elevation="0">
+        <v-card-text>
+          <div ref="cloud" style="width: 100%;height:300px"></div>
+        </v-card-text>
+      </v-card>
+    </v-sheet>
+
+
   </div>
 </template>
 
@@ -89,6 +106,7 @@
                     }]
                 },
                 cloud: '',
+              loading: true
             }
         },
         mounted() {
@@ -124,7 +142,8 @@
                 } catch (e) {
                     console.log("异常", e);
                 } finally {
-                  this.$store.commit('setLoading', false)
+                  this.$store.commit('setLoading', false);
+                  this.loading = false;
                 }
             },
         }

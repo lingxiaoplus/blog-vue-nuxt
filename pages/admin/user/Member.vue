@@ -2,7 +2,6 @@
   <v-container fluid>
     <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" :bottom="true">
       {{ snackbarText }}
-      <v-btn dark text @click="snackbar = false">确认</v-btn>
     </v-snackbar>
     <v-data-iterator :items="items" :items-per-page.sync="itemsPerPage" :footer-props="{ itemsPerPageOptions }">
       <template v-slot:default="props">

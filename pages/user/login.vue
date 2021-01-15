@@ -78,7 +78,7 @@
 <script>
     export default {
         data: () => ({
-            username: "lin123",
+            username: "",
             password: "",
             e1: false,
             snackbar: false,

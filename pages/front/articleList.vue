@@ -1,6 +1,21 @@
 <template>
   <div>
-    <v-sheet>
+    <v-container v-if="loading">
+      <v-row>
+        <v-col cols="12">
+          <v-skeleton-loader  v-bind="attrs" type="card" ></v-skeleton-loader>
+        </v-col>
+
+        <v-col v-for="count in 6" :key="count" cols="12" md="4">
+          <v-skeleton-loader
+            v-bind="attrs"
+            type="article, actions"
+          ></v-skeleton-loader>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-sheet v-else>
       <v-flex class="d-flex flex-column align-center justify-center">
         <v-carousel cycle interval="4000" height="600px">
           <v-carousel-item v-for="(item,i) in banners" :key="i" :src="item.headImage" @click="readArticle(item.id)">
@@ -100,6 +115,11 @@
     name: 'articleList',
     data() {
       return {
+        attrs: {
+          class: "pa-2",
+          boilerplate: true,
+          elevation: 2,
+        },
         currentItem: 0,
         items: [],
         articleList: [],
@@ -107,7 +127,8 @@
         pageNum: 1,
         pageCount: 0,
         itemsPerPage: 10,
-        hitokoto: ''
+        hitokoto: '',
+        loading: true
       }
     },
     watch: {
@@ -119,12 +140,14 @@
     methods: {
       async getBanner() {
         try {
+          this.loading = true;
           let resp = await this.$http.get('/front/banner')
           console.log('结果', resp.data.data)
           this.banners = resp.data.data.banners
           this.hitokoto = resp.data.data.hitokoto
         } catch (e) {
           console.log('异常', e)
+          this.loading = false;
         } finally {
 
         }
@@ -157,6 +180,7 @@
           console.log('异常', e)
         } finally {
           this.$store.commit('setLoading', false);
+          this.loading = false;
         }
       },
       readArticle(id) {

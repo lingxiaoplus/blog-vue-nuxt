@@ -5,7 +5,15 @@
       <p class="font-weight-medium px-2" style="font-size: 26px">友情链接</p>
     </v-flex>
 
-    <v-row no-gutters>
+    <v-container v-if="loading">
+      <v-row>
+        <v-col v-for="count in 6" :key="count" cols="12" md="3">
+          <v-skeleton-loader type="article, actions"></v-skeleton-loader>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-row no-gutters v-else>
       <v-col v-for="(item,index) in items" :key="item.title" cols="12" sm="3">
         <v-card class="ma-2" elevation="4" dark :color="colorList[index]">
           <div class="d-flex flex-no-wrap justify-space-between">
@@ -41,16 +49,20 @@
     data() {
       return {
         items: [],
-        colorList: ''
+        colorList: '',
+        loading: true,
       }
     },
     methods: {
       async getLinks() {
         try {
+          this.loading = true;
           let resp = await this.$http.get('/front/link')
           this.items = resp.data.data
         } catch (e) {
           console.log('异常', e)
+        }finally {
+          this.loading = false;
         }
       }
     },

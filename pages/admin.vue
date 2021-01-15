@@ -91,8 +91,8 @@
       <!-- 界面内容显示区域 -->
 
       <div>
-        <transition mode="out-in">
-
+        
+          
           <v-row v-if="loading">
             <v-col cols="12" md="4">
               <v-skeleton-loader v-bind="attrs" type="card-avatar, article, actions"></v-skeleton-loader>
@@ -109,7 +109,9 @@
               <v-skeleton-loader v-bind="attrs" type="list-item-avatar-three-line, image, article"></v-skeleton-loader>
             </v-col>
           </v-row>
+          <transition mode="out-in">
           <router-view/>
+          
         </transition>
       </div>
     </v-main>

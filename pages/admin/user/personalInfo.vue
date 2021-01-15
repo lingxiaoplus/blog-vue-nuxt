@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-flex class="px-2">
     <v-row>
       <v-col clos="2">
         <v-card tile elevation="6">
@@ -15,9 +15,6 @@
               </v-list-item-content>
             </v-list-item>
           </v-img>
-          <v-card-text>
-            蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED
-          </v-card-text>
           <v-card-text>
             昵称：{{user_info.nickname}}
           </v-card-text>
@@ -43,7 +40,8 @@
                         <v-text-field label="昵称" required v-model="user_info.nickname"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
+                        <v-text-field label="Legal middle name"
+                                      hint="example of helper text only on focus"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
@@ -88,11 +86,9 @@
         </v-card>
 
 
-
-
       </v-col>
       <v-col cols="7">
-        <v-card tile elevation="6" >
+        <v-card tile elevation="6">
           <v-tabs v-model="tablemodel">
             <v-tab v-for="item in tables" :key="item.name">
               {{ item.name }}
@@ -101,11 +97,12 @@
             <v-tabs-items v-model="tablemodel">
               <v-tab-item>
                 <v-flex class="d-flex flex-column mx-6">
-                  <v-text-field style="max-width: 260px" label="昵称 (不作为登录使用)" v-model="user_info.nickname"></v-text-field>
+                  <v-text-field style="max-width: 260px" label="昵称 (不作为登录使用)"
+                                v-model="user_info.nickname"></v-text-field>
                   <v-text-field style="max-width: 260px" label="手机号"></v-text-field>
 
                   <v-flex class="d-flex flex-row" style="align-items: center">
-                    <v-list-item-action-text style="font-size: 16px;margin-right: 10px">性别: </v-list-item-action-text>
+                    <v-list-item-action-text style="font-size: 16px;margin-right: 10px">性别:</v-list-item-action-text>
                     <v-radio-group v-model="sex" row style="max-width: 260px">
                       <v-radio label="男" value="0" color="primary"></v-radio>
                       <v-radio label="女" value="1" color="primary"></v-radio>
@@ -139,104 +136,118 @@
       </v-col>
 
     </v-row>
-  </v-container>
+  </v-flex>
 
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                tablemodel: 0,
-                tables: [{
-                    name: '用户资料'
-                }, {
-                    name: '操作日志'
-                },],
-                user_info: '',
-                updateInfoDialog: false,
-                sex: 2,
-                pageNum: 1,
-                pageCount: 0,
-                headers: [
-                    {
-                        text: '日志内容',
-                        value: 'operationContent',
-                    },
-                    {
-                        text: '操作账号',
-                        value: 'username'
-                    },
-                    {
-                        text: '操作人名字',
-                        value: 'nickname'
-                    },
-                    {
-                        text: 'IP',
-                        value: 'userIp'
-                    },
-                    {
-                        text: '耗时(毫秒)',
-                        value: 'runTakes'
-                    },
-                    {
-                        text: '日志类型',
-                        value: 'operationType'
-                    },
-                    {
-                        text: '浏览器',
-                        value: 'browser'
-                    },
-                    {
-                        text: '操作时间',
-                        value: 'createAt',
-                    },
-                ],
-                loading: false,
-                itemsPerPage: 10,
-                logList: [],
-            }
-        },
-        watch:{
-            pageCount(v){
-                console.log("pageCount 改变",v);
-            },
-            pageNum(){
-                this.getLogList();
-            },
-            tablemodel(v){
-                if (v===1){
-                    this.getLogList();
-                }
-            }
-        },
-        methods: {
-            async getLogList() {
-                this.loading = true;
-                try {
-                    this.$store.commit('setLoading', true);
-                    let resp = await this.$http.get(`/log?pageNum=${this.pageNum}&pageSize=5&logType=-1&keyword=${this.user_info.username}`);
-                    this.logList = resp.data.data;
-                    this.pageCount = resp.data.totalPage;
-                    //console.log("log列表  totalPage  ", resp.data.totalPage,"  pageCount  ", this.pageCount);
-                } catch (e) {
-                    console.log("log列表失败", e.response);
-                    this.snackbar = true;
-                    this.snackbarText = "获取log列表失败";
-                } finally {
-                    this.loading = false;
-                    this.$store.commit('setLoading', false);
-                }
-            }
-        },
-        mounted() {
-
-            let user_info = JSON.parse(localStorage.getItem("user_info"));
-            console.log("用户信息", user_info);
-            this.user_info = user_info;
-
+  export default {
+    data() {
+      return {
+        tablemodel: 0,
+        tables: [{
+          name: '用户资料'
+        }, {
+          name: '操作日志'
+        }],
+        user_info: '',
+        updateInfoDialog: false,
+        sex: 2,
+        pageNum: 1,
+        pageCount: 0,
+        headers: [
+          {
+            text: '日志内容',
+            value: 'operationContent'
+          },
+          {
+            text: '操作账号',
+            value: 'username'
+          },
+          {
+            text: '操作人名字',
+            value: 'nickname'
+          },
+          {
+            text: 'IP',
+            value: 'userIp'
+          },
+          {
+            text: '耗时(毫秒)',
+            value: 'runTakes'
+          },
+          {
+            text: '日志类型',
+            value: 'operationType'
+          },
+          {
+            text: '浏览器',
+            value: 'browser'
+          },
+          {
+            text: '操作时间',
+            value: 'createAt'
+          }
+        ],
+        loading: false,
+        itemsPerPage: 10,
+        logList: []
+      }
+    },
+    watch: {
+      pageCount(v) {
+        console.log('pageCount 改变', v)
+      },
+      pageNum() {
+        this.getLogList()
+      },
+      tablemodel(v) {
+        if (v === 1) {
+          this.getLogList()
         }
+      }
+    },
+    methods: {
+      async getLogList() {
+        this.loading = true
+        try {
+          this.$store.commit('setLoading', true)
+          let resp = await this.$http.get(`/log?pageNum=${this.pageNum}&pageSize=5&logType=-1&keyword=${this.user_info.username}`)
+          this.logList = resp.data.data
+          this.pageCount = resp.data.totalPage
+          //console.log("log列表  totalPage  ", resp.data.totalPage,"  pageCount  ", this.pageCount);
+        } catch (e) {
+          console.log('log列表失败', e.response)
+          this.snackbar = true
+          this.snackbarText = '获取log列表失败'
+        } finally {
+          this.loading = false
+          this.$store.commit('setLoading', false)
+        }
+      },
+      async saveUserInfo() {
+        this.loading = true
+        try {
+          this.$store.commit('setLoading', true)
+          let resp = await this.$http.post("/user",this.user_info)
+        } catch (e) {
+          console.log('log列表失败', e.response)
+          this.snackbar = true
+          this.snackbarText = '获取log列表失败'
+        } finally {
+          this.loading = false
+          this.$store.commit('setLoading', false)
+        }
+      }
+    },
+    mounted() {
+
+      let user_info = JSON.parse(localStorage.getItem('user_info'))
+      console.log('用户信息', user_info)
+      this.user_info = user_info
+
     }
+  }
 </script>
 
 <style>

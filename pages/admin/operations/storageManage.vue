@@ -2,7 +2,6 @@
   <div>
     <v-snackbar v-model="snackbar" color="error" :timeout="3000" :top="true">
       {{ snackbarText }}
-      <v-btn dark text @click="snackbar = false">确认</v-btn>
     </v-snackbar>
 
     <v-toolbar flat color="white">
@@ -105,7 +104,7 @@
         上传
       </v-btn>
 
-      <v-btn @click="" class="ma-2 white--text" small tile color="warning" :loading="loading"
+      <v-btn @click="getFileList" class="ma-2 white--text" small tile color="warning" :loading="loading"
              :disabled="loading">
         <v-icon left small>mdi-refresh</v-icon>
         同步
@@ -145,6 +144,9 @@
       <el-table-column prop="bucket" label="空间名称">
       </el-table-column>
       <el-table-column prop="size" label="文件大小">
+        <template slot-scope="scope">
+          <v-card-text v-text="getFileSize(scope.row.size)"></v-card-text>
+        </template>
       </el-table-column>
 
       <el-table-column prop="path" label="文件预览">
@@ -156,7 +158,8 @@
             trigger="hover"
             :content="scope.row.path+suffix_720p">
 
-            <el-image slot="reference" style="width: 80px;height: 40px" :src="scope.row.path+suffix" aspect-ratio="2" :preview-src-list="[scope.row.path+suffix_1080p]">
+            <el-image slot="reference" style="width: 80px;height: 40px" :src="scope.row.path+suffix" aspect-ratio="2"
+                      :preview-src-list="[scope.row.path+suffix_1080p]">
               <template v-slot:placeholder>
                 <v-row
                   class="fill-height ma-0"
@@ -190,7 +193,7 @@
     </div>
 
 
-    <v-dialog v-model="uploadDialog" max-width="600px">
+    <v-dialog v-model="uploadDialog" max-width="500px">
       <v-card>
         <v-card-title>
           <span class="headline">文件上传</span>
@@ -210,6 +213,7 @@
                   :on-success="handleSuccess"
                   :on-error="handleError"
                   :limit="1"
+                  :headers="headers"
                   multiple>
                   <i class="el-icon-upload"></i>
                   <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -222,8 +226,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="uploadDialog = false">取消</v-btn>
-          <v-btn color="blue darken-1" text @click="uploadFile()">上传</v-btn>
+<!--          <v-btn color="blue darken-1" text @click="uploadDialog = false">取消</v-btn>
+          <v-btn color="blue darken-1" text @click="uploadFile()">上传</v-btn>-->
+          <v-btn color="blue darken-1" text @click="uploadDialog = false">关闭</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -232,202 +237,221 @@
 </template>
 
 <script>
-    import exportExcel from '../../../components/ExportExcel.vue';
+import exportExcel from '../../../components/ExportExcel.vue'
 
-    export default {
-        name: "storageManage",
-        components: {
-            'export-excel': exportExcel
+export default {
+  name: 'storageManage',
+  components: {
+    'export-excel': exportExcel
+  },
+  data() {
+    return {
+      startTime: '',
+      endTime: '',
+      fileList: [],
+      suffix: '?imageView2/2/w/240/h/120/format/jpg/q/75|imageslim',
+      suffix_720p: '?imageView2/1/w/1280/h/720/format/jpg/q/75',
+      suffix_1080p: '?imageView2/1/w/1920/h/1080/format/jpg/q/75',
+      loading: false,
+      uploadDialog: false,
+      configDialog: false,
+      fileName: '',
+      selectList: [],
+      fileInfo: {
+        name: '',
+        path: '',
+        size: ''
+      },
+      snackbarText: '',
+      snackbar: false,
+      inputKeywork: '',
+      accessKey: '',
+
+
+      hidePagination: false,
+      currentPage: 1,
+      total: 0,
+      pageNum: 1,
+      pageSize: 5,
+
+
+      //导出表格字段及formatter信息
+      exportExcelArry: [{
+        prop: 'name',
+        label: '文件路径',
+        formatterFlag: false
+      }, {
+        prop: 'mimeType',
+        label: '文件类型',
+        formatterFlag: false,
+        formatterType: 'common-type',
+        formatterInfo: [{ value: 0, label: '未完成' }, { value: 1, label: '已完成' }]
+      }, {
+        prop: 'bucket',
+        label: '空间名称',
+        formatterFlag: false
+      },
+        {
+          prop: 'size',
+          label: '文件大小',
+          formatterFlag: false
         },
-        data() {
-            return {
-                startTime: '',
-                endTime: '',
-                fileList: [],
-                suffix: '?imageView2/2/w/240/h/120/format/jpg/q/75|imageslim',
-                suffix_720p: '?imageView2/1/w/1280/h/720/format/jpg/q/75',
-                suffix_1080p: '?imageView2/1/w/1920/h/1080/format/jpg/q/75',
-                loading: false,
-                uploadDialog: false,
-                configDialog: false,
-                fileName: "",
-                selectList: [],
-                fileInfo: {
-                    name: '',
-                    path: '',
-                    size: ''
-                },
-                snackbarText: '',
-                snackbar: false,
-                inputKeywork: '',
-                accessKey: '',
-
-
-                hidePagination: false,
-                currentPage: 1,
-                total: 0,
-                pageNum: 1,
-                pageSize: 5,
-
-
-                //导出表格字段及formatter信息
-                exportExcelArry: [{
-                    prop: 'name',
-                    label: '文件路径',
-                    formatterFlag: false
-                }, {
-                    prop: 'mimeType',
-                    label: '文件类型',
-                    formatterFlag: false,
-                    formatterType: 'common-type',
-                    formatterInfo: [{value: 0, label: '未完成'}, {value: 1, label: '已完成'}]
-                }, {
-                    prop: 'bucket',
-                    label: '空间名称',
-                    formatterFlag: false
-                },
-                    {
-                        prop: 'size',
-                        label: '文件大小',
-                        formatterFlag: false
-                    },
-                    {
-                        prop: 'path',
-                        label: '文件预览',
-                        formatterFlag: false
-                    }
-                ],
-                //导出excel表格id及excel名称
-                exportExcelInfo: {
-                    excelId: 'record-table',
-                    excelName: '七牛云存储.xlsx'
-                },
-                //需要导出的table数据
-                tableAllData: [],
-                ossProperties: {
-                    accessKey: '',
-                    secretKey: '',
-                    bucketName: '',
-                    prefixImg: '',
-                },
-            }
-        },
-        methods: {
-            handleSelectionChange(val) {
-                this.selectList = val;
-            },
-            async getFileList() {
-                try {
-                    this.$store.commit('setLoading', true);
-                    let resp = await this.$http.get(`/upload/list?pageNum=${this.pageNum}&pageSize=${this.pageSize}`);
-                    console.log("", resp.data);
-                    this.fileList = resp.data.data;
-                    this.tableAllData = resp.data.data;
-
-                    this.total = resp.data.total;
-                    this.totalPage = resp.data.totalPage;
-                } catch (e) {
-                    console.log("异常", e);
-                    this.snackbar = true;
-                    this.snackbarText = e.response.data.message ? e.response.data.message : "获取文件列表失败";
-                } finally {
-                    this.$store.commit('setLoading', false);
-                }
-            },
-
-            async uploadFile() {
-                if (!this.fileInfo.path) {
-                    this.$message.error("请上传图片，或等图片上传完成");
-                    return
-                }
-                try {
-                    let resp = await this.$http.put(`/upload/${this.fileInfo.name}?newName=${this.fileName}`);
-                    this.uploadDialog = false;
-                    this.$message.success("上传成功");
-                    this.getFileList();
-                } catch (e) {
-                    console.log(e)
-                    this.snackbar = true;
-                    this.snackbarText = e.response.data.message ? e.response.data.message : "上传文件失败";
-                } finally {
-
-                }
-
-            },
-
-            async onDeleteClick() {
-                if (this.selectList.length < 1) {
-                    this.snackbar = true;
-                    this.snackbarText = "请选择要删除的评论";
-                    return;
-                }
-                try {
-                    this.loading = true;
-                    let resp = await this.$http.delete(`/upload/${this.selectList[0].name}`);
-                    console.log("删除成功", resp.data);
-                    this.getFileList();
-                } catch (e) {
-                    console.log("删除评论失败", e);
-                    this.$message.error("删除评论失败，请稍后再试")
-                } finally {
-                    this.loading = false;
-                }
-            },
-
-            async getOssProperties() {
-                try {
-                    let resp = await this.$http.get("/upload/oss_properties");
-                    this.ossProperties = resp.data.data
-                } catch (e) {
-                    console.log("获取配置失败", e)
-                }
-            },
-
-            handlePictureCardPreview(file) {
-                console.log("返回文件上传结果", file.response);
-                //this.dialogImageUrl = file.url;
-                //this.dialogVisible = true;
-            },
-            handleSuccess(response, file, fileList) {
-                //文件上传成功时的钩子
-                console.log("文件上传成功时的钩子", response);
-                this.fileInfo = response;
-                //this.imageUrl = this.fileInfo.path;
-            },
-            handleError(err, file, fileList) {
-                console.log("文件上传失败时的钩子", err);
-                this.showSnackBar("文件上传失败", false);
-            },
-
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pageSize = val;
-                this.getFileList();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.pageNum = val;
-                this.getFileList();
-            },
-
-            exportExcelSelect() {
-                if (this.selectList.length === 0) {
-                    this.$message.info('请勾选导出项');
-                    return;
-                }
-                //将选中项传给this. tableAllData
-                this.tableAllData = this.selectList;
-                //需要延时调导出方法，为了等待数据初始化到列表中
-                setTimeout(() => {
-                    this.$refs.myChild.exportExcel();
-                }, 500)
-            },
-        },
-        mounted() {
-            this.getFileList();
-            this.getOssProperties();
+        {
+          prop: 'path',
+          label: '文件预览',
+          formatterFlag: false
         }
+      ],
+      //导出excel表格id及excel名称
+      exportExcelInfo: {
+        excelId: 'record-table',
+        excelName: '七牛云存储.xlsx'
+      },
+      //需要导出的table数据
+      tableAllData: [],
+      ossProperties: {
+        accessKey: '',
+        secretKey: '',
+        bucketName: '',
+        prefixImg: ''
+      },
+      headers: {}
     }
+  },
+  methods: {
+    handleSelectionChange(val) {
+      this.selectList = val
+    },
+    async getFileList() {
+      try {
+        this.loading = true;
+        this.$store.commit('setLoading', true)
+        let resp = await this.$http.get(`/upload/list?pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
+        console.log('', resp.data)
+        this.fileList = resp.data.data
+        this.tableAllData = resp.data.data
+
+        this.total = parseInt(resp.data.total)
+        this.totalPage = parseInt(resp.data.totalPage)
+      } catch (e) {
+        console.log('异常', e)
+        this.snackbar = true
+        this.snackbarText = e.response.data.message ? e.response.data.message : '获取文件列表失败'
+      } finally {
+        this.$store.commit('setLoading', false)
+        this.loading = false;
+      }
+    },
+
+    async uploadFile() {
+      if (!this.fileInfo.path) {
+        this.$message.error('请上传图片，或等图片上传完成')
+        return
+      }
+      try {
+        let resp = await this.$http.put(`/upload/${this.fileInfo.name}?newName=${this.fileName}`)
+        this.uploadDialog = false
+        this.$message.success('上传成功')
+        this.getFileList()
+      } catch (e) {
+        console.log(e)
+        this.snackbar = true
+        this.snackbarText = e.response.data.message ? e.response.data.message : '上传文件失败'
+      } finally {
+
+      }
+
+    },
+
+    async onDeleteClick() {
+      if (this.selectList.length < 1) {
+        this.snackbar = true
+        this.snackbarText = '请选择要删除的评论'
+        return
+      }
+      try {
+        this.loading = true
+        let resp = await this.$http.delete(`/upload/${this.selectList[0].name}`)
+        console.log('删除成功', resp.data)
+        this.getFileList()
+      } catch (e) {
+        console.log('删除评论失败', e)
+        this.$message.error('删除评论失败，请稍后再试')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async getOssProperties() {
+      try {
+        let resp = await this.$http.get('/upload/oss_properties')
+        this.ossProperties = resp.data.data
+      } catch (e) {
+        console.log('获取配置失败', e)
+      }
+    },
+
+    handlePictureCardPreview(file) {
+      console.log('返回文件上传结果', file.response)
+      //this.dialogImageUrl = file.url;
+      //this.dialogVisible = true;
+    },
+    handleSuccess(response, file, fileList) {
+      //文件上传成功时的钩子
+      console.log('文件上传成功时的钩子', response)
+      this.fileInfo = response
+      this.getFileList();
+      //this.imageUrl = this.fileInfo.path;
+    },
+    handleError(err, file, fileList) {
+      console.log('文件上传失败时的钩子', err)
+      this.showSnackBar('文件上传失败', false)
+    },
+
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+      this.pageSize = val
+      this.getFileList()
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+      this.pageNum = val
+      this.getFileList()
+    },
+
+    exportExcelSelect() {
+      if (this.selectList.length === 0) {
+        this.$message.info('请勾选导出项')
+        return
+      }
+      //将选中项传给this. tableAllData
+      this.tableAllData = this.selectList
+      //需要延时调导出方法，为了等待数据初始化到列表中
+      setTimeout(() => {
+        this.$refs.myChild.exportExcel()
+      }, 500)
+    },
+    getFileSize(size){
+      let floatSize = parseFloat(size).toFixed(2);
+      let fileSize =  floatSize + "b";
+      if (floatSize > 1024){
+        let size1 = (floatSize / 1024).toFixed(2);
+        fileSize = size1 + "kb";
+        if (size1 > 1024){
+          fileSize = (size1/1024).toFixed(2) + "mb";
+        }
+      }
+      return fileSize;
+    }
+  },
+  mounted() {
+    this.getFileList()
+    this.getOssProperties()
+    this.headers = {
+      'blog-login-token': localStorage.getItem('blog_login_token')
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -3,7 +3,6 @@
   <div>
     <v-snackbar v-model="snackbar" color="primary" :timeout="3000" :bottom="true">
       {{ snackbarText }}
-      <v-btn dark text @click="snackbar = false">确认</v-btn>
     </v-snackbar>
 
     <template>

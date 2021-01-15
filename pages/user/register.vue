@@ -3,7 +3,6 @@
     <v-container style="position:relative;z-index: 999;" fluid fill-height>
       <!--<v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="1500" :top="true">
         {{ snackbarText }}
-        <v-btn dark text @click="snackbar = false">确认</v-btn>
       </v-snackbar>-->
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>

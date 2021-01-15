@@ -2,7 +2,6 @@
   <div>
     <v-snackbar v-model="snackbar" color="primary" :timeout="3000" :top="true">
       {{ snackbarText }}
-      <v-btn dark text @click="snackbar = false">确认</v-btn>
     </v-snackbar>
 
 
@@ -135,7 +134,7 @@
                 this.loading = true;
                 try {
                     this.$store.commit('setLoading', true);
-                    let resp = await this.$http.get(`/log?pageNum=${this.pageNum}&pageSize=5&logType=${this.tablemodel===0?0:-1}&keyword=${this.keyword}`);
+                    let resp = await this.$http.get(`/log?pageNum=${this.pageNum}&pageSize=10&logType=${this.tablemodel===0?0:-1}&keyword=${this.keyword}`);
                     console.log("log列表", resp.data);
                     this.tables[this.tablemodel].data = resp.data.data;
                     //this.desserts = resp.data.data;

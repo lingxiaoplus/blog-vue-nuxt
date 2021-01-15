@@ -2,7 +2,6 @@
   <div>
     <v-snackbar v-model="snackbar" color="error" :timeout="2000" :top="true">
       {{ snackbarText }}
-      <v-btn dark text @click="snackbar = false">确认</v-btn>
     </v-snackbar>
 
     <v-data-table :headers="headers" :items="desserts" :page.sync="pageNum" :items-per-page="itemsPerPage"

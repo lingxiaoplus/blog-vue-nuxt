@@ -21,8 +21,15 @@
 
       </v-flex>
 
+      <v-container v-if="loading">
+        <v-row>
+          <v-col v-for="count in 6" :key="count" cols="12" md="6">
+            <v-skeleton-loader type="article, actions"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+      </v-container>
 
-      <v-timeline :dense="$vuetify.breakpoint.smAndDown" v-for="(item,index) in lines" :key="item.id">
+      <v-timeline v-else :dense="$vuetify.breakpoint.smAndDown" v-for="(item,index) in lines" :key="item.id">
         <v-timeline-item :color="colorList[index]"  fill-dot :left="index%2!==0" :right="index%2===0" :small="index%2===0">
           <template v-slot:opposite>
             <p :style="[{'color': colorList[index]}]">{{item.createTime}}</p>
@@ -67,6 +74,7 @@
                 ],
                 selectList: [2018,2019,2020,2021,2022,2023],
                 select: '',
+                loading: true,
             }
         },
         props:{
@@ -80,6 +88,7 @@
         methods:{
             async getTimeLine() {
                 try {
+                  this.loading = true;
                   this.$store.commit('setLoading', true)
                     let resp = await this.$http.get("/front/article/timeLineForYear?date=" + `${this.select}-01-01`);
                     console.log("获取timeline", resp.data);
@@ -90,6 +99,7 @@
                     this.snackbarText = e.response.data.message ? e.response.data.message : "获取timeline失败"
                 }finally {
                   this.$store.commit('setLoading', false)
+                  this.loading = false;
                 }
             },
         },
