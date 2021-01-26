@@ -32,7 +32,7 @@
       <v-timeline v-else :dense="$vuetify.breakpoint.smAndDown" v-for="(item,index) in lines" :key="item.id">
         <v-timeline-item :color="colorList[index]"  fill-dot :left="index%2!==0" :right="index%2===0" :small="index%2===0">
           <template v-slot:opposite>
-            <p :style="[{'color': colorList[index]}]">{{item.createTime}}</p>
+            <p :style="[{'color': colorList[index]}]">{{item.createAt}}</p>
           </template>
           <v-card>
             <v-card-title :class="colorList[index]" class="purple lighten-2">

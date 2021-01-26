@@ -70,7 +70,7 @@
 
                       <v-btn text color="grey" class="mx-2 white--text" small>
                         <v-icon left dark small>mdi-clock-outline</v-icon>
-                        {{item.updateTime}}
+                        {{item.updateAt}}
                       </v-btn>
                       <v-btn text color="grey" class="mx-2 white--text" small>
                         <v-icon right dark small>mdi-comment-eye-outline</v-icon>

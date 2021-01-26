@@ -61,7 +61,7 @@
               </v-img> -->
                 <v-card-text>
                   <no-ssr>
-                    <mavon-editor v-model="article.content"
+                    <mavon-editor v-model="article.content" :ishljs = "false"
                                   :toolbarsFlag="false" defaultOpen="preview" :subfield="false"
                                   :editable="false" :navigation="false" :previewBackground="primaryColor"
                     ></mavon-editor>

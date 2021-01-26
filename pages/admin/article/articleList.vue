@@ -144,7 +144,7 @@
           },
           {
             text: '更新时间',
-            value: 'updateTime'
+            value: 'updateAt'
           },
           {
             text: '操作',

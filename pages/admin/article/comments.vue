@@ -158,8 +158,8 @@
                         }
                     });*/
                     this.tableData = this.reSetReplie(resp.data.data);
-                    this.total = resp.data.total;
-                    this.totalPage = resp.data.totalPage;
+                    this.total = parseInt(resp.data.total);
+                    this.totalPage = parseInt(resp.data.totalPage);
                     this.hidePagination = this.totalPage <= 1; //当页数小于等于1页的时候，就隐藏分页
                 } catch (e) {
                     console.log("获取评论异常", e);
