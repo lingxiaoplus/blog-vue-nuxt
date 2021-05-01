@@ -85,10 +85,14 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
+    //publicPath: process.env.PATH_TYPE === 'gray' ? '/_nuxt/' : 'https://blog.lingxiaomz.top/_nuxt/',
     vendor: ['element-ui'],
     babel: {
       'plugins': remove_console
     }
+  },
+  env: {
+    PATH_TYPE: process.env.PATH_TYPE
   },
   router: {
     extendRoutes(routes, resolve) {

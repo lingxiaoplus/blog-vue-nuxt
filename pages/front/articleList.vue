@@ -51,55 +51,56 @@
           <span class="font-weight-medium px-2" style="font-size: 26px">我的文章</span>
         </v-flex>
         <v-flex>
-          <v-card class="px-6" elevation="0">
-            <v-row class="px-6">
-              <v-col v-for="item in articleList" :key="item.id" md="4" sm="12" xs="2">
-                <v-hover v-slot:default="{ hover }">
-                  <v-card class="ma-2" :elevation="hover?10:2">
-                    <v-img :src="item.headImage" height="194" @click="readArticle(item.id)">
-                      <v-card-title style="position: absolute;bottom: 0px;color: white">{{item.title}}</v-card-title>
+          <v-row class="px-6">
+            <v-col v-for="item in articleList" :key="item.id" md="4" sm="12" xs="2">
+              <v-hover v-slot:default="{ hover }">
+                <v-card class="ma-2" :elevation="hover?10:2">
+                  <v-img :src="item.headImage + image_720p_suffix" height="194" @click="readArticle(item.id)">
+                    <v-card-title style="position: absolute;bottom: 0px;color: white">{{item.title}}</v-card-title>
 
-                    </v-img>
-                    <v-flex class="mx-2 grey--text" style="max-height: 100px">
-                      <p class="text-subtitle-1 font-weight-light">
-                        {{item.content}}...
-                      </p>
-                    </v-flex>
+                  </v-img>
+                  <v-flex class="mx-2 grey--text" @click="readArticle(item.id)">
+                    <p class="text-subtitle-1 font-weight-light content-text">
+                      {{item.content}}
+                    </p>
+                  </v-flex>
 
-                    <v-card-actions>
+                  <v-card-text>
+                    <v-btn text color="grey" class="white--text">
+                      <v-icon left dark small>mdi-clock-outline</v-icon>
+                      {{item.updateAt}}
+                    </v-btn>
+                    <v-btn text color="grey" class="white--text">
+                      <v-icon left dark small>mdi-comment-eye-outline</v-icon>
+                      阅读({{item.watchCount}})
+                    </v-btn>
 
-                      <v-btn text color="grey" class="mx-2 white--text" small>
-                        <v-icon left dark small>mdi-clock-outline</v-icon>
-                        {{item.updateAt}}
-                      </v-btn>
-                      <v-btn text color="grey" class="mx-2 white--text" small>
-                        <v-icon right dark small>mdi-comment-eye-outline</v-icon>
-                        阅读({{item.watchCount}})
-                      </v-btn>
-
-                      <v-btn text color="grey" class="mx-2 white--text" small>
-                        <v-icon left dark small>mdi-electron-framework</v-icon>
-                        {{item.categoryName}}
-                      </v-btn>
-
-                      <v-btn text color="green" class="ml-auto" @click="readArticle(item.id)">
-                        阅读
-                      </v-btn>
-                    </v-card-actions>
-                    <v-divider></v-divider>
-                    <v-card-actions v-if="item.labels">
-                      <v-chip-group column>
-                        <v-chip color="primary" v-for="label in item.labels" :key="label.id">
+                    <v-btn text color="grey" class="white--text">
+                      <v-icon left dark small>mdi-electron-framework</v-icon>
+                      {{item.categoryName}}
+                    </v-btn>
+                    <v-btn text disabled>
+                      <v-chip-group column v-if="item.labels">
+                        <v-chip color="primary" v-for="label in item.labels" :key="label.id" small>
                           {{ label.name }}
                         </v-chip>
                       </v-chip-group>
-                    </v-card-actions>
-                  </v-card>
-                </v-hover>
+                    </v-btn>
 
-              </v-col>
-            </v-row>
-          </v-card>
+                  </v-card-text>
+<!--                  <v-divider></v-divider>
+                  <v-card-actions v-if="item.labels">
+                    <v-chip-group column>
+                      <v-chip color="primary" v-for="label in item.labels" :key="label.id">
+                        {{ label.name }}
+                      </v-chip>
+                    </v-chip-group>
+                  </v-card-actions>-->
+                </v-card>
+              </v-hover>
+
+            </v-col>
+          </v-row>
         </v-flex>
         <div class="text-center" v-if="pageCount > 0">
           <v-pagination v-model="pageNum" :length="pageCount" :total-visible="7"></v-pagination>
@@ -128,7 +129,8 @@
         pageCount: 0,
         itemsPerPage: 10,
         hitokoto: '',
-        loading: true
+        loading: true,
+        image_720p_suffix: "?imageView2/1/w/720/h/480/format/webp/q/75|watermark/2/text/5YeM6ZyE55qE5Y2a5a6i/font/5a6L5L2T/fontsize/240/fill/I0Y4RjhGOA==/dissolve/44/gravity/NorthWest/dx/10/dy/10"
       }
     },
     watch: {
@@ -196,5 +198,19 @@
 </script>
 
 <style scoped>
-
+.content-text{
+  position:relative;
+  line-height:1.4em;
+  /* 3 times the line-height to show 3 lines */
+  height:4.2em;
+  overflow:hidden;
+}
+.content-text ::after{
+  content:"...";
+  font-weight:bold;
+  position:absolute;
+  bottom:0;
+  right:0;
+  padding:0 20px 1px 45px;
+}
 </style>

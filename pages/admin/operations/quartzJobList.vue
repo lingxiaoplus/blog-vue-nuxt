@@ -4,13 +4,13 @@
       {{ snackbarText }}
     </v-snackbar>
 
-    <v-toolbar flat color="white">
+    <v-toolbar flat>
       <v-toolbar-title>定时任务</v-toolbar-title>
       <v-divider class="mx-4" inset vertical></v-divider>
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-row class="pa-2" style="background: white">
+    <v-row class="pa-2">
       <v-col cols="2">
         <el-input size="small" maxlength="10" v-model="inputKeywork" placeholder="输入定时任务名称搜索">
 
@@ -29,7 +29,7 @@
       </v-col>
 
     </v-row>
-    <v-row class="pa-4" style="background: white">
+    <v-row class="pa-4">
       <v-btn @click="addJobDialog = true" class="ma-2 white--text" small tile color="blue" :loading="loading"
              :disabled="loading">
         <v-icon left small>mdi-plus</v-icon>

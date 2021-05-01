@@ -2,7 +2,7 @@
   <div>
 
     <template>
-      <v-toolbar flat color="white">
+      <v-toolbar flat>
         <v-toolbar-title>评论管理</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
@@ -57,7 +57,7 @@
       </v-card>
     </v-dialog>
 
-    <v-row class="pa-4" style="background: white" >
+    <v-row class="pa-4" >
       <v-btn @click="deleteDialog = true" class="ma-2 white--text" small tile color="error" :loading="loading"
              :disabled="loading || (selectList.length < 1)">
         <v-icon left>mdi-delete</v-icon> 删除

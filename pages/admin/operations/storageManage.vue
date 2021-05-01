@@ -4,7 +4,7 @@
       {{ snackbarText }}
     </v-snackbar>
 
-    <v-toolbar flat color="white">
+    <v-toolbar flat>
       <v-toolbar-title>存储管理</v-toolbar-title>
       <v-divider class="mx-4" inset vertical></v-divider>
       <v-spacer></v-spacer>
@@ -61,7 +61,7 @@
       </v-card>
     </v-dialog>
 
-    <v-row class="pa-2" style="background: white">
+    <v-row class="pa-2">
       <v-col cols="2">
         <el-input size="small" maxlength="10" v-model="inputKeywork" placeholder="输入文件名称搜索">
 
@@ -97,7 +97,7 @@
       </v-col>
 
     </v-row>
-    <v-row class="pa-4" style="background: white">
+    <v-row class="pa-4">
       <v-btn @click="uploadDialog = true" class="ma-2 white--text" small tile color="blue" :loading="loading"
              :disabled="loading">
         <v-icon left small>mdi-cloud-upload-outline</v-icon>
@@ -128,7 +128,24 @@
       </v-btn>
     </v-row>
 
-    <export-excel ref="myChild"
+    <v-data-table :headers="table_headers" :items="fileList" v-model="selectList" :item-key="name"
+                  hide-default-footer class="elevation-1" :loading="loading" show-select>
+      <template v-slot:item.size="{ item }">
+        <v-card-text v-text="getFileSize(item.size)"></v-card-text>
+      </template>
+      <template v-slot:item.image="{ item }">
+        <v-img :src="item.path" :aspect-ratio="16/9" width="60" @click="">
+        </v-img>
+      </template>
+      <template v-slot:no-data>
+        <v-btn color="primary" @click="" tile>刷新试试</v-btn>
+      </template>
+    </v-data-table>
+    <div class="text-center pt-2" v-if="totalPage>0">
+      <v-pagination v-model="pageNum" :length="totalPage"></v-pagination>
+    </div>
+
+<!--    <export-excel ref="myChild"
                   :exportExcelInfo="exportExcelInfo"
                   :tableData="selectList"
                   :exportExcelArry="exportExcelArry">
@@ -171,10 +188,6 @@
               </template>
             </el-image>
           </el-popover>
-
-          <!--<v-img width="80" height="40" :src="scope.row.path+suffix" aspect-ratio="2">
-
-          </v-img>-->
         </template>
       </el-table-column>
 
@@ -190,7 +203,7 @@
                      layout="prev, pager, next, jumper,sizes, total"
                      :total="total">
       </el-pagination>
-    </div>
+    </div>-->
 
 
     <v-dialog v-model="uploadDialog" max-width="500px">
@@ -273,6 +286,7 @@ export default {
       total: 0,
       pageNum: 1,
       pageSize: 5,
+      totalPage: 0,
 
 
       //导出表格字段及formatter信息
@@ -315,7 +329,42 @@ export default {
         bucketName: '',
         prefixImg: ''
       },
-      headers: {}
+      headers: {},
+      table_headers: [
+        {
+          text: '文件路径',
+          value: 'name'
+        },
+        {
+          text: '文件类型',
+          value: 'mimeType'
+        },
+        {
+          text: '文件md5',
+          value: 'fileMd5'
+        },
+        {
+          text: '文件大小',
+          value: 'size',
+          align: 'start'
+        },
+        {
+          text: '上传时间',
+          value: 'time'
+        },
+        {
+          text: '文件预览',
+          value: 'image',
+          sortable: false,
+
+        },
+      ],
+    }
+  },
+  watch: {
+    pageNum(val) {
+      this.pageNum = val
+      this.getFileList()
     }
   },
   methods: {

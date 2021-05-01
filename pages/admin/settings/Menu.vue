@@ -13,7 +13,7 @@
 
     <v-dialog v-model="dialog" max-width="500px">
       <template v-slot:activator="{ on }">
-        <v-row class="pa-4" style="background: white">
+        <v-row class="pa-4">
           <v-btn v-on="on" @click="editedIndex = -1" small color="primary" class="ma-2 white--text" tile>
             <v-icon left small>mdi-plus</v-icon>
             新增

@@ -63,7 +63,8 @@
                   <no-ssr>
                     <mavon-editor v-model="article.content" :ishljs = "false"
                                   :toolbarsFlag="false" defaultOpen="preview" :subfield="false"
-                                  :editable="false" :navigation="false" :previewBackground="primaryColor"
+                                  :editable="false" :navigation="false"
+                                  :htmlCode="htmlCallback"
                     ></mavon-editor>
                   </no-ssr>
                 </v-card-text>
@@ -258,6 +259,7 @@
         qr_content: '',
         isTop: false,
         primaryColor: '#fbfbfb',
+        codeStyle: 'dark',
         commentData:{
           parentId: '',
           userId: '',
@@ -310,6 +312,9 @@
       childEventHandler: function(res) {
         // res会传回一个data, 包含属性mdValue和htmlValue，具体含义请自行翻译
         this.article.content = res
+      },
+      htmlCallback(status,value){
+        console.log("html源码回调",value)
       },
       async getArticleContent(id) {
         try {

@@ -1,6 +1,11 @@
 <template>
   <v-app id="inspire">
     <v-app-bar color="primary" dark app>
+      <!-- loading条 -->
+      <v-progress-linear :active="this.$store.getters.getLoadingState"
+                         :indeterminate="this.$store.getters.getLoadingState" absolute bottom background-color="white"
+                         color="error">
+      </v-progress-linear>
       <v-app-bar-nav-icon class="ml-2">
         <v-avatar size="36">
           <img src="../assets/ic_launcher_round.png" alt="John">

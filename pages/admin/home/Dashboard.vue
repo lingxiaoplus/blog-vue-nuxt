@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import * as echarts from 'echarts'
+import blogStatistics from '../../../plugins/charts/blogStatistics'
 export default {
   name: 'dashboard',
   data() {
@@ -94,120 +96,7 @@ export default {
           show: false
         }
       ],
-
-      option: {
-        title: {
-          text: '文章统计/周'
-        },
-        tooltip: {},
-        legend: {
-          data: ['新增文章']
-        },
-        xAxis: {
-          data: ['技术', '娱乐', '福利', '羊毛', '其他']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '新增文章',
-            type: 'bar',
-            data: [5, 20, 36, 10, 20]
-            //color:  this.$vuetify.theme.themes.light.primary
-          }
-        ]
-      },
-
-      lineData: {
-        title: {
-          text: 'ip流量统计/周'
-        },
-        xAxis: {
-          type: 'category',
-          data: []
-        },
-        yAxis: {
-          type: 'value',
-          data: []
-        },
-        series: [
-          {
-            data: [],
-            type: 'line',
-            smooth: true
-          }
-        ]
-      },
       first: false,
-
-      operatorsData:{
-        title: {
-          text: '运营商'
-        },
-         tooltip: {
-                trigger: 'item',
-                formatter: '{a} <br/>{b}: {c} ({d}%)'
-            },
-        legend: {orient: 'horizontal', bottom: 10, data: ['中国电信', '中国移动', '中国联通', '其他', '境外', '长城宽带']},
-        series: [
-          {
-            name: '运营商',
-            type: 'pie',
-            radius: '55%',
-            radius: ['60%', '70%'],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {show: true,fontSize: '20',fontWeight: 'bold'}
-            },
-            labelLine: {show: false },
-            data: [
-              {
-                value: 235,
-                name: '中国电信'
-              },
-              {
-                value: 274,
-                name: '中国移动'
-              },
-              {
-                value: 310,
-                name: '中国联通'
-              },
-              {
-                value: 335,
-                name: '其他'
-              },
-              {
-                value: 100,
-                name: '境外'
-              }
-            ]
-          }
-        ],
-        itemStyle: {
-          emphasis: {
-            // 阴影的大小
-            shadowBlur: 200,
-            // 阴影水平方向上的偏移
-            shadowOffsetX: 0,
-            // 阴影垂直方向上的偏移
-            shadowOffsetY: 0,
-            // 阴影颜色
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          },
-          normal: {
-            color: function(params) {
-              //自定义颜色
-              var colorList = ['#00FFFF', '#00FF00', '#FFFF00', '#FF8C00', '#FF0000'];
-              return colorList[params.dataIndex];
-            }
-          }
-        }
-      },
-
     };
   },
   //html加载完成后执行
@@ -219,18 +108,28 @@ export default {
     });
     this.getStatistics();
     this.getVisitAnalyse();
+    // 监听窗口的变化，实时调用 echarts的 resize事件
+    window.onresize = () =>{
+      this.$refs.sale.resize();
+      this.$refs.line.resize();
+      this.$refs.pie.resize();
+    }
   },
   methods: {
     async getStatistics() {
       try {
         let resp = await this.$http.get('/statistics/article/week');
         console.log('>>', resp.data.data);
-        this.option.xAxis.data = resp.data.data.articleIncreasedData.xaxis;
-        this.option.yAxis.data = resp.data.data.articleIncreasedData.yaxis;
-        this.option.series[0].data = resp.data.data.articleIncreasedData.series;
+        if (Object.keys(resp.data.data.articleIncreasedData).length !== 0){
+          blogStatistics.articleCountOption.xAxis.data = resp.data.data.articleIncreasedData.xaxis;
+          blogStatistics.articleCountOption.data = resp.data.data.articleIncreasedData.yaxis;
+          blogStatistics.articleCountOption.series[0].data = resp.data.data.articleIncreasedData.series;
+        }
+
         var sale = this.$echarts.init(this.$refs.sale, this.theme);
         // 使用刚指定的配置项和数据显示图表。
-        sale.setOption(this.option);
+
+        sale.setOption(blogStatistics.articleCountOption);
 
         this.cardList[0].number = resp.data.data.aggregationData.todayIncreased;
         this.cardList[1].number = resp.data.data.aggregationData.articleSize;
@@ -239,7 +138,7 @@ export default {
         this.cardList[4].number = resp.data.data.aggregationData.labelSize;
         this.cardList[5].number = resp.data.data.aggregationData.linkSize;
       } catch (e) {
-        console.log('', e);
+        console.log('错误', e);
       }
     },
     async getVisitAnalyse() {
@@ -247,17 +146,20 @@ export default {
         let resp = await this.$http.get('/statistics/visitAnalyse');
         console.log('ip访问统计', resp.data.data);
 
-        this.lineData.xAxis.data = resp.data.data.lineCharData.xaxis;
-        this.lineData.yAxis.data = resp.data.data.lineCharData.yaxis;
-        this.lineData.series[0].data = resp.data.data.lineCharData.series;
+        if (Object.keys(resp.data.data.lineCharData).length !== 0){
+          blogStatistics.ipVisitOption.xAxis.data = resp.data.data.lineCharData.xaxis;
+          blogStatistics.ipVisitOption.yAxis.data = resp.data.data.lineCharData.yaxis;
+          blogStatistics.ipVisitOption.series[0].data = resp.data.data.lineCharData.series;
+        }
         const line = this.$echarts.init(this.$refs.line, this.theme);
-        line.setOption(this.lineData);
+        line.setOption(blogStatistics.ipVisitOption);
 
-        this.operatorsData.legend.data = resp.data.data.operatorAnalyse.legend;
-        this.operatorsData.series.data = resp.data.data.operatorAnalyse.series;
-        console.log("运营商",this.operatorsData);
+        /*if (Object.keys(resp.data.data.operatorAnalyse).length !== 0){
+          blogStatistics.operatorsOption.legend.data = resp.data.data.operatorAnalyse.legend;
+          blogStatistics.operatorsOption.series[0].data = resp.data.data.operatorAnalyse.series;
+        }*/
         const pie = this.$echarts.init(this.$refs.pie, this.theme);
-        pie.setOption(this.operatorsData);
+        pie.setOption(blogStatistics.operatorsOption);
 
       } catch (e) {
         console.log('', e);

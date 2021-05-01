@@ -14,7 +14,7 @@
             <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
           </v-avatar>
           <v-list-item-content>
-            <v-list-item-title style="margin-left: 20px;">{{user_name}}</v-list-item-title>
+            <v-list-item-title style="margin-left: 20px;">{{ user_name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -29,7 +29,7 @@
               <v-icon >mdi-{{item.action}}</v-icon>
             </v-list-item-action> -->
             <v-list-item-content>
-              <v-list-item-title>{{item.name}}</v-list-item-title>
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
             </v-list-item-content>
           </template>
           <!-- 二级菜单 -->
@@ -47,7 +47,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark :style="[{'background-color': primaryColor}]">
+    <v-app-bar app color="primary" dark>
       <!-- loading条 -->
       <v-progress-linear @setLoading="setLoadingState" :active="this.$store.getters.getLoadingState"
                          :indeterminate="this.$store.getters.getLoadingState" absolute bottom background-color="white"
@@ -58,7 +58,7 @@
       <v-spacer/>
 
       <v-btn icon dark @click="change2LightOrDark">
-        <v-icon>{{lightOrDarkIcon}}</v-icon>
+        <v-icon>{{ lightOrDarkIcon }}</v-icon>
       </v-btn>
 
       <v-menu offset-y>
@@ -91,27 +91,31 @@
       <!-- 界面内容显示区域 -->
 
       <div>
-        
-          
-          <v-row v-if="loading">
-            <v-col cols="12" md="4">
-              <v-skeleton-loader v-bind="attrs" type="card-avatar, article, actions"></v-skeleton-loader>
-              <v-skeleton-loader v-bind="attrs" type="date-picker"></v-skeleton-loader>
-            </v-col>
 
-            <v-col cols="12" md="4">
-              <v-skeleton-loader v-bind="attrs" type="article, actions"></v-skeleton-loader>
-              <v-skeleton-loader v-bind="attrs" type="table-heading, list-item-two-line, image, table-tfoot"></v-skeleton-loader>
-            </v-col>
 
-            <v-col cols="12" md="4">
-              <v-skeleton-loader v-bind="attrs" type="list-item-avatar, divider, list-item-three-line, card-heading, image, actions"></v-skeleton-loader>
-              <v-skeleton-loader v-bind="attrs" type="list-item-avatar-three-line, image, article"></v-skeleton-loader>
-            </v-col>
-          </v-row>
-          <transition mode="out-in">
-          <router-view/>
-          
+        <v-row v-if="loading">
+          <v-col cols="12" md="4">
+            <v-skeleton-loader v-bind="attrs" type="card-avatar, article, actions"></v-skeleton-loader>
+            <v-skeleton-loader v-bind="attrs" type="date-picker"></v-skeleton-loader>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-skeleton-loader v-bind="attrs" type="article, actions"></v-skeleton-loader>
+            <v-skeleton-loader v-bind="attrs"
+                               type="table-heading, list-item-two-line, image, table-tfoot"></v-skeleton-loader>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-skeleton-loader v-bind="attrs"
+                               type="list-item-avatar, divider, list-item-three-line, card-heading, image, actions"></v-skeleton-loader>
+            <v-skeleton-loader v-bind="attrs" type="list-item-avatar-three-line, image, article"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <transition mode="out-in">
+          <v-container fluid>
+            <router-view/>
+          </v-container>
+
         </transition>
       </div>
     </v-main>
@@ -122,216 +126,216 @@
 </template>
 
 <script>
-  import menus from '../plugins/menu.js'
+import menus from '../plugins/menu.js'
 
-  export default {
-    props: {
-      source: String
+export default {
+  props: {
+    source: String
 
+  },
+  data: () => ({
+    drawer: null,
+    attrs: {
+      class: 'mb-2',
+      boilerplate: false,
+      elevation: 2
     },
-    data: () => ({
-      drawer: null,
-      attrs: {
-        class: 'mb-2',
-        boilerplate: false,
-        elevation: 2,
+    menuMap: [],
+    user_name: 'admin',
+    loading: false,
+    snackbar: false,
+    snackbarText: '',
+    snackbarColor: 'success',
+    colors: ['success', 'error', 'warning', 'info'],
+    menuList: [
+      {
+        name: '布局设置',
+        action: 'layout'
       },
-      menuMap: [],
-      user_name: 'admin',
-      loading: false,
-      snackbar: false,
-      snackbarText: '',
-      snackbarColor: 'success',
-      colors: ['success', 'error', 'warning', 'info'],
-      menuList: [
-        {
-          name: '布局设置',
-          action: 'layout'
-        },
-        {
-          name: '退出登录',
-          action: 'logout'
-        }
-      ],
-      defMenu: {
-        icon: 'mdi-home', name: '首页', url: '/admin', keepAlive: 1,
-        children: [{
-          name: '统计',
-          url: '/admin/home/dashboard',
-          keepAlive: 1
-        }]
-      },
-      items: [],
-      lightOrDarkIcon: 'mdi-brightness-6',
-      primaryColor: '#424242'
-    }),
-    computed: {
-      /*items() {
-          return menus.drawers;
-      },*/
-      themes() {
-        return menus.themes
+      {
+        name: '退出登录',
+        action: 'logout'
       }
+    ],
+    defMenu: {
+      icon: 'mdi-home', name: '首页', url: '/admin', keepAlive: 1,
+      children: [{
+        name: '统计',
+        url: '/admin/home/dashboard',
+        keepAlive: 1
+      }]
     },
-    head() {
-      return {
-        title: "博客后台管理系统",
-        meta: [
-          {
-            hid: 'admin-index',
-            name: '博客后台管理系统',
-            content: '后台管理系统'
-          }
-        ]
-      }
-    },
-    methods: {
-      change2LightOrDark() {
-        if (this.lightOrDarkIcon === 'mdi-brightness-6') {
-          this.lightOrDarkIcon = 'mdi-brightness-4'
-          this.$vuetify.theme.dark = true
-          this.primaryColor = '#424242'
-        } else {
-          this.lightOrDarkIcon = 'mdi-brightness-6'
-          let themeCache = localStorage.getItem('theme_style')
-          let themeStyle = JSON.parse(themeCache)
-          this.$vuetify.theme.dark = false
-          this.$vuetify.theme.themes.light.primary = themeStyle.color
-          this.primaryColor = themeStyle.color
-        }
-
-      },
-      menuClick(item) {
-        switch (item.action) {
-          case 'logout':
-            this.logout()
-            break
-          default:
-            break
-        }
-      },
-      onPathChanged(item, subItem) {
-        var map = []
-        map.push({
-          text: item.name,
-          disabled: false,
-          href: item.url
-        })
-        map.push({
-          text: subItem.name,
-          disabled: true,
-          href: subItem.url
-        })
-        this.menuMap = map
-        console.log('menuMap: ', this.menuMap)
-      },
-      async logout(){
-        try {
-          this.items = [this.defMenu]
-          let resp = await this.$http.get('/logout')
-          localStorage.setItem("blog_login_token","");
-          this.delCookie()
-          this.$router.push('/user/login')
-        } catch (e) {
-          console.log('获取菜单失败', e)
-        }
-      },
-      async getMenuData() {
-        try {
-          this.items = [this.defMenu]
-          let resp = await this.$http.get('/menu')
-          console.log('菜单', resp.data.data)
-          this.items = this.items.concat(resp.data.data)
-          localStorage.setItem('menu_info', JSON.stringify(resp.data.data))
-        } catch (e) {
-          console.log('获取菜单失败', e)
-        }
-      },
-      setLoadingState(loading) {
-        console.log('设置状态>>>>>>>>>', loading)
-      },
-      async getTheme(uid) {
-        try {
-          let resp = await this.$http.get(`/theme/${uid}`)
-          let themeStyle = resp.data.data
-          themeStyle.id = uid
-          this.$vuetify.theme.themes.light.primary = themeStyle.color
-          localStorage.setItem('theme_style', JSON.stringify(themeStyle))
-          console.log('获取主题信息', themeStyle)
-          this.$router.push('/admin/home/dashboard')
-        } catch (e) {
-          console.log('获取主题信息失败', e)
-        } finally {
-
-        }
-      },
-      delCookie() {
-        var keys = document.cookie.match(/[^ =;]+(?==)/g)
-        if (keys) {
-          for (var i = keys.length; i--;) {
-            document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString() // 清除当前域名下的,例如：m.ratingdog.cn
-            document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString() // 清除当前域名下的，例如 .m.ratingdog.cn
-            document.cookie = keys[i] + '=0;path=/;domain=ratingdog.cn;expires=' + new Date(0).toUTCString() // 清除一级域名下的或指定的，例如 .ratingdog.cn
-          }
-        }
-      }
-    },
-
-    mounted() {
-      console.log('>>>>>>>>>>>>', this.menuMap)
-      //初始化面包屑
-      let menu = this.defMenu
-      this.items.push(menu)
-      this.menuMap[0] = {
-        text: menu.name,
-        disabled: false,
-        href: menu.url
-      }
-      this.menuMap[1] = {
-        text: menu.children[0].name,
-        disabled: false,
-        href: menu.children[0].url
-      }
-      this.loading = true;
-      this.$http.get('/user/verify')
-        .then(res => {
-          //console.log('登录有效', res.data)
-          this.user_name = res.data.data.nickname
-          localStorage.setItem('user_info', JSON.stringify(res.data.data))
-          this.getTheme(res.data.data.userId)
-          this.loading = false;
-        }).catch(e => {
-        this.loading = false;
-        console.log('登录失败', e)
-        this.$router.push('/user/login')
-      })
-      this.getMenuData()
+    items: [],
+    lightOrDarkIcon: 'mdi-brightness-6',
+    primaryColor: '#424242'
+  }),
+  computed: {
+    /*items() {
+        return menus.drawers;
+    },*/
+    themes() {
+      return menus.themes
     }
+  },
+  head() {
+    return {
+      title: '博客后台管理系统',
+      meta: [
+        {
+          hid: 'admin-index',
+          name: '博客后台管理系统',
+          content: '后台管理系统'
+        }
+      ]
+    }
+  },
+  methods: {
+    change2LightOrDark() {
+      if (this.lightOrDarkIcon === 'mdi-brightness-6') {
+        this.lightOrDarkIcon = 'mdi-brightness-4'
+        this.$vuetify.theme.dark = true
+        this.primaryColor = '#424242'
+      } else {
+        this.lightOrDarkIcon = 'mdi-brightness-6'
+        let themeCache = localStorage.getItem('theme_style')
+        let themeStyle = JSON.parse(themeCache)
+        this.$vuetify.theme.dark = false
+        this.$vuetify.theme.themes.light.primary = themeStyle.color
+        this.primaryColor = themeStyle.color
+      }
+
+    },
+    menuClick(item) {
+      switch (item.action) {
+        case 'logout':
+          this.logout()
+          break
+        default:
+          break
+      }
+    },
+    onPathChanged(item, subItem) {
+      var map = []
+      map.push({
+        text: item.name,
+        disabled: false,
+        href: item.url
+      })
+      map.push({
+        text: subItem.name,
+        disabled: true,
+        href: subItem.url
+      })
+      this.menuMap = map
+      console.log('menuMap: ', this.menuMap)
+    },
+    async logout() {
+      try {
+        this.items = [this.defMenu]
+        let resp = await this.$http.get('/logout')
+        localStorage.setItem('blog_login_token', '')
+        this.delCookie()
+        this.$router.push('/user/login')
+      } catch (e) {
+        console.log('获取菜单失败', e)
+      }
+    },
+    async getMenuData() {
+      try {
+        this.items = [this.defMenu]
+        let resp = await this.$http.get('/menu')
+        console.log('菜单', resp.data.data)
+        this.items = this.items.concat(resp.data.data)
+        localStorage.setItem('menu_info', JSON.stringify(resp.data.data))
+      } catch (e) {
+        console.log('获取菜单失败', e)
+      }
+    },
+    setLoadingState(loading) {
+      console.log('设置状态>>>>>>>>>', loading)
+    },
+    async getTheme(uid) {
+      try {
+        let resp = await this.$http.get(`/theme/${uid}`)
+        let themeStyle = resp.data.data
+        themeStyle.id = uid
+        this.$vuetify.theme.themes.light.primary = themeStyle.color
+        localStorage.setItem('theme_style', JSON.stringify(themeStyle))
+        console.log('获取主题信息', themeStyle)
+        this.$router.push('/admin/home/dashboard')
+      } catch (e) {
+        console.log('获取主题信息失败', e)
+      } finally {
+
+      }
+    },
+    delCookie() {
+      var keys = document.cookie.match(/[^ =;]+(?==)/g)
+      if (keys) {
+        for (var i = keys.length; i--;) {
+          document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString() // 清除当前域名下的,例如：m.ratingdog.cn
+          document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString() // 清除当前域名下的，例如 .m.ratingdog.cn
+          document.cookie = keys[i] + '=0;path=/;domain=ratingdog.cn;expires=' + new Date(0).toUTCString() // 清除一级域名下的或指定的，例如 .ratingdog.cn
+        }
+      }
+    }
+  },
+
+  mounted() {
+    console.log('>>>>>>>>>>>>', this.menuMap)
+    //初始化面包屑
+    let menu = this.defMenu
+    this.items.push(menu)
+    this.menuMap[0] = {
+      text: menu.name,
+      disabled: false,
+      href: menu.url
+    }
+    this.menuMap[1] = {
+      text: menu.children[0].name,
+      disabled: false,
+      href: menu.children[0].url
+    }
+    this.loading = true
+    this.$http.get('/user/verify')
+      .then(res => {
+        //console.log('登录有效', res.data)
+        this.user_name = res.data.data.nickname
+        localStorage.setItem('user_info', JSON.stringify(res.data.data))
+        this.getTheme(res.data.data.userId)
+        this.loading = false
+      }).catch(e => {
+      this.loading = false
+      console.log('登录失败', e)
+      this.$router.push('/user/login')
+    })
+    this.getMenuData()
   }
+}
 </script>
 
 <style>
-  .v-enter {
-    opacity: 0;
-  }
+.v-enter {
+  opacity: 0;
+}
 
-  .v-enter-active {
-    transition: 0.5s;
-  }
+.v-enter-active {
+  transition: 0.5s;
+}
 
-  .v-enter-to {
-    opacity: 1;
-  }
+.v-enter-to {
+  opacity: 1;
+}
 
-  .v-leave {
-    opacity: 1;
-  }
+.v-leave {
+  opacity: 1;
+}
 
-  .v-leave-to {
-    opacity: 0;
-  }
+.v-leave-to {
+  opacity: 0;
+}
 
-  .v-leave-active {
-    transition: 0.5s;
-  }
+.v-leave-active {
+  transition: 0.5s;
+}
 </style>
