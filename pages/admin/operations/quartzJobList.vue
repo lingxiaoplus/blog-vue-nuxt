@@ -50,7 +50,7 @@
     </v-row>
 
 
-    <v-data-table :headers="headers" :items="jobList" :page.sync="pageNum" :items-per-page="itemsPerPage"
+    <v-data-table :headers="headers" :items="jobList" :page.sync="pageNum"
                   hide-default-footer class="elevation-1"  :loading="loading">
       <template v-slot:item.triggerState="{ item }">
         <v-chip :color="item.triggerState==='ACQUIRED'?'green':'grey'" dark small>{{ item.triggerState }}</v-chip>
@@ -65,8 +65,8 @@
         <v-btn color="primary" @click="getQuartzJobList" tile>刷新试试</v-btn>
       </template>
     </v-data-table>
-    <div class="text-center pt-2" v-if="pageCount>1">
-      <v-pagination v-model="pageNum" :length="pageCount"></v-pagination>
+    <div class="text-center pt-2" v-if="totalPage>1">
+      <v-pagination v-model="pageNum" :length="totalPage"></v-pagination>
 
     </div>
 
@@ -111,13 +111,10 @@
 </template>
 
 <script>
-  import exportExcel from '../../../components/ExportExcel.vue'
+  //import exportExcel from '../../../components/ExportExcel.vue'
 
   export default {
     name: 'storageManage',
-    components: {
-      'export-excel': exportExcel
-    },
     data() {
       return {
         jobData:{
@@ -195,6 +192,7 @@
         total: 0,
         pageNum: 1,
         pageSize: 5,
+        totalPage: 0,
 
 
         //导出表格字段及formatter信息
@@ -257,7 +255,7 @@
           let response = await this.$http.get("/job/list?pageNum=" + this.pageNum);
           console.log("response : ", response.data);
           this.jobList = response.data.data;
-          this.pageCount = response.data.totalPage;
+          this.totalPage = response.data.totalPage;
         } catch (e) {
           console.log("获取任务列表失败", e.response.data);
           this.$store.commit('showSnackbar', {

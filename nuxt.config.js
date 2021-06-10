@@ -86,9 +86,21 @@ export default {
    */
   build: {
     //publicPath: process.env.PATH_TYPE === 'gray' ? '/_nuxt/' : 'https://blog.lingxiaomz.top/_nuxt/',
-    vendor: ['element-ui'],
+    analyze: true, // 使用webpack-bundle-analyzer来可视化包以及如何优化它们
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css', 'svg'],
+    vendor: ['element-ui'], //防止多次打包
     babel: {
-      'plugins': remove_console
+      'plugins': [
+        [
+          "component",
+          {
+            "libraryName": "element-ui",
+            "styleLibraryName": "theme-chalk"
+          }
+        ],
+        ...remove_console,
+      ]
     }
   },
   env: {

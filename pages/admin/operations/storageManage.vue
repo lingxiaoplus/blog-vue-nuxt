@@ -128,7 +128,7 @@
       </v-btn>
     </v-row>
 
-    <v-data-table :headers="table_headers" :items="fileList" v-model="selectList" :item-key="name"
+    <v-data-table :headers="table_headers" :items="fileList" v-model="selectList"
                   hide-default-footer class="elevation-1" :loading="loading" show-select>
       <template v-slot:item.size="{ item }">
         <v-card-text v-text="getFileSize(item.size)"></v-card-text>
