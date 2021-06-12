@@ -36,3 +36,5 @@ Message.install = function (Vue, options) {
 }
 Vue.use(Message)
 Vue.prototype.$message = Message
+import animated from 'animate.css' // npm install animate.css --save安装，在引入
+Vue.use(animated)

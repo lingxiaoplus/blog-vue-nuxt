@@ -3,7 +3,7 @@
     <v-snackbar v-model="snackbar" color="error" :timeout="3000" :bottom="true">
       {{ snackbarText }}
     </v-snackbar>
-    <v-progress-linear :active="loading" indeterminate absolute top color="pink" height="5">
+    <v-progress-linear v-show="loading" indeterminate absolute top color="pink" height="5">
     </v-progress-linear>
     <v-card class="overflow-hidden" elevation="0">
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
@@ -50,15 +50,45 @@
       </v-app-bar>
 
       <v-sheet id="scrolling-techniques-2" class="overflow-y-auto" max-height="1200">
-
-        <v-container class="pa-6" id="scrolling-container">
+        <v-skeleton-loader
+          v-if="loading"
+          type="list-item-three-line,list-item-two-line,list-item-three-line,list-item-two-line, card-heading"
+        >
+        </v-skeleton-loader>
+        <v-container class="pa-6" id="scrolling-container" v-else>
           <!--文章内容-->
           <v-layout row wrap>
             <v-hover v-slot:default="{ hover }">
-              <v-card :elevation="hover?12:2" style="width: 100%;">
+              <v-card :elevation="hover?12:2" style="width: 100%;" class="animated fadeIn">
                 <!-- <v-img :src="article.headImage" >
                 <v-card-title style="position: absolute;bottom: 0px;color: white">{{article.title}}</v-card-title>
               </v-img> -->
+                <v-card-title>
+                  <v-chip class="ma-2 d-flex flex-column align-center justify-center" color="green" dark>
+                    <v-avatar left>
+                      <v-icon small>
+                        mdi-cake-variant
+                      </v-icon>
+                    </v-avatar>
+                    {{article.categoryName}}
+                  </v-chip>
+                </v-card-title>
+                <v-card-text>
+                  <v-btn text color="grey" class="white--text">
+                    <v-icon left dark small>mdi-clock-outline</v-icon>
+                    发布日期：{{article.createAt}}
+                  </v-btn>
+                  <v-btn text color="grey" class="white--text">
+                    <v-icon left dark small>mdi-comment-eye-outline</v-icon>
+                    阅读次数：{{article.watchCount}}
+                  </v-btn>
+
+                  <v-btn text color="grey" class="white--text">
+                    <v-icon left dark small>mdi-electron-framework</v-icon>
+                    文章字数：{{article.content.length}}
+                  </v-btn>
+                </v-card-text>
+
                 <v-card-text>
                   <no-ssr>
                     <mavon-editor v-model="article.content" :ishljs = "false"
@@ -68,10 +98,30 @@
                     ></mavon-editor>
                   </no-ssr>
                 </v-card-text>
-                <v-card-actions class="d-flex">
-                  <el-link class="pa-2" style="color: #909399"><i class="el-icon-time el-icon--left">
-                    {{article.createAt}}</i></el-link>
+                <v-card-text>
+                  <v-list>
+                    <v-list-item>
+                      <v-list-item-icon>
+                        <v-icon color="green darken-2">mdi-account</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>文章作者：{{article.author}}</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-icon>
+                        <v-icon color="blue darken-2">mdi-link</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>文章链接：{{qr_content}}</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-icon>
+                        <v-icon color="purple darken-2">mdi-copyright</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>版权声明: 本博客所有文章除特別声明外，均采用 CC BY 4.0 许可协议。转载请注明来源 凌霄 !</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
 
+                <v-card-actions class="d-flex" v-if="false">
                   <v-btn icon>
                     <v-icon>mdi-heart</v-icon>
                   </v-btn>
@@ -97,7 +147,7 @@
               </v-card>
             </v-hover>
 
-            <v-flex class="py-4" xs12 md12>
+            <v-flex class="py-4 animated fadeIn" xs12 md12 >
               <v-form ref="form" lazy-validation>
               <v-card elevation="0">
                 <v-card-title>发表评论</v-card-title>
@@ -131,7 +181,7 @@
               </v-form>
             </v-flex>
 
-            <v-flex class="py-4" xs12 md12>
+            <v-flex class="py-4 animated fadeIn" xs12 md12>
               <v-card elevation="2">
                 <v-card-title>当前评论</v-card-title>
 

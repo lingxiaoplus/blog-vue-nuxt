@@ -80,7 +80,7 @@
                               label="请选择图片类型" persistent-hint return-object single-line></v-select>
                   </v-flex>
                   <v-card-actions v-if="imageType.value==='local'" class="d-flex align-center justify-center">
-                    <v-sheet width="200" height="200" elevation="2" class="d-flex align-center justify-center">
+                    <v-sheet width="200" height="200" elevation="0" class="d-flex align-center justify-center">
                       <v-flex>
                         <el-upload :action="uploadImageUrl" list-type="picture-card"
                                    :on-preview="handlePictureCardPreview" :on-success="handleSuccess"
@@ -98,10 +98,9 @@
                   </v-card-actions>
 
                   <v-card-actions v-else class="d-flex align-center justify-center" @click="chooseWebDialog">
-                    <v-sheet width="200" height="200" elevation="2" class="d-flex align-center justify-center">
+                    <v-sheet width="200" height="200" elevation="1" class="d-flex align-center justify-center">
                       <v-img v-if="headPortrait" :src="headPortrait" aspect-ratio="1"></v-img>
                       <v-icon medium v-else>mdi-camera-enhance-outline</v-icon>
-
                     </v-sheet>
                   </v-card-actions>
                 </v-card>

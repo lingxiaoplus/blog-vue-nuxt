@@ -4,10 +4,8 @@
       <v-flex xs10 md12 class="pa-4">
         <v-layout row wrap>
           <v-col class="pa-2" cols="3" v-for="(item, index) in cardList" :key="item.name">
-            <v-scale-transition>
-              <div v-if="item.show">
                 <v-hover v-slot:default="{ hover }">
-                  <v-card :elevation="hover ? 6 : 2" tile>
+                  <v-card :elevation="hover ? 6 : 2" tile class="animated fadeInDown" :style="[{'animation-delay': (index + 1)*0.1 + 's'}]">
                     <v-row style="align-items: center">
                       <v-col cols="6"><v-img class="mx-4" :src="item.src" width="40px" height="40px"></v-img></v-col>
                       <v-col cols="6" class="text--secondary">
@@ -17,25 +15,23 @@
                     </v-row>
                   </v-card>
                 </v-hover>
-              </div>
-            </v-scale-transition>
           </v-col>
         </v-layout>
       </v-flex>
 
-      <v-flex class="pa-4" xs12 md12 style="width: 100%">
+      <v-flex xs12 md12 style="width: 100%" class="pa-4 animated fadeInDown" :style="[{'animation-delay': (cardList.length + 1)*0.1 + 's'}]">
         <v-card tile>
           <v-card-text class="px2"><div ref="line" style="width: 100%;height:350px"></div></v-card-text>
         </v-card>
       </v-flex>
 
-      <v-flex xs10 md6 class="pa-4">
+      <v-flex xs10 md6 class="pa-4 animated fadeInDown" :style="[{'animation-delay': (cardList.length + 2)*0.1 + 's'}]">
         <v-card tile>
           <v-card-text class="px2"><div ref="sale" style="width: 100%;height:350px"></div></v-card-text>
         </v-card>
       </v-flex>
 
-      <v-flex xs10 md6 class="pa-4">
+      <v-flex xs10 md6 class="pa-4 animated fadeInDown" :style="[{'animation-delay': (cardList.length + 3)*0.1 + 's'}]">
         <v-card tile>
           <v-card-text class="px2"><div ref="pie" style="width: 100%;height:350px"></div></v-card-text>
         </v-card>
@@ -101,11 +97,11 @@ export default {
   },
   //html加载完成后执行
   mounted() {
-    this.cardList.forEach((item, index) => {
+    /*this.cardList.forEach((item, index) => {
       setTimeout(() => {
         item.show = true;
       }, (index + 1) * 200);
-    });
+    });*/
     this.getStatistics();
     this.getVisitAnalyse();
     // 监听窗口的变化，实时调用 echarts的 resize事件

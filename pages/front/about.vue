@@ -2,18 +2,18 @@
   <v-app  id="inspire">
     <v-sheet>
       <v-flex class="d-flex flex-column align-center justify-center">
-        <v-avatar size="160">
+        <v-avatar size="160" class="animated fadeInDown" style="animation-delay:0.1s">
           <img src="https://blog-1252348761.cos.ap-chengdu.myqcloud.com/image/dog.gif">
         </v-avatar>
-        <p class="text-h4 font-weight-medium ma-2">凌霄</p>
-        <p class="text-h6 font-weight-medium">java开发工程师</p>
-        <p class="text-subtitle-1 font-weight-light">习惯沉默而不停止思考，无力表达却不曾失去态度</p>
+        <p class="text-h4 font-weight-medium ma-2 animated fadeInDown" style="animation-delay:0.2s">凌霄</p>
+        <p class="text-h6 font-weight-medium animated fadeInDown" style="animation-delay:0.3s">java开发工程师</p>
+        <p class="text-subtitle-1 font-weight-light animated fadeInDown" style="animation-delay:0.4s">习惯沉默而不停止思考，无力表达却不曾失去态度</p>
 
-        <v-flex class="d-flex align-center justify-center flex-row mt-4">
+        <v-flex class="d-flex align-center justify-center flex-row mt-4 animated fadeInDown" style="animation-delay:0.5s">
           <v-icon medium>mdi-kubernetes</v-icon>
           <span class="font-weight-medium px-2" style="font-size: 26px">我的项目</span>
         </v-flex>
-        <v-row no-gutters>
+        <v-row no-gutters class="animated fadeInDown" style="animation-delay:0.6s">
           <v-col v-for="(project,index) in projectList" :key="project.id" cols="12" sm="4">
             <v-card elevation="0" @click="">
               <v-flex class="d-flex flex-column align-center justify-center pa-6 ma-4">
@@ -29,12 +29,12 @@
         </v-row>
 
 
-        <v-flex class="d-flex align-center justify-center flex-row mt-4">
+        <v-flex class="d-flex align-center justify-center flex-row mt-4 animated fadeInDown" style="animation-delay:0.7s">
           <v-icon medium>mdi-hammer-wrench</v-icon>
           <span class="font-weight-medium px-2" style="font-size: 26px">我的技能</span>
         </v-flex>
 
-        <v-sheet class="v-sheet--offset ma-2" color="cyan" elevation="12" min-width="900px" max-width="calc(100% - 32px)"
+        <v-sheet class="v-sheet--offset ma-2 animated fadeInDown" style="animation-delay:0.8s" color="cyan" elevation="12" min-width="900px" max-width="calc(100% - 32px)"
         >
           <v-sparkline
             :labels="labels"
@@ -45,7 +45,7 @@
           ></v-sparkline>
         </v-sheet>
 
-        <v-row no-gutters>
+        <v-row no-gutters class="animated fadeInDown" style="animation-delay:0.9s">
           <v-col v-for="(technology,index) in technologyList" :key="technology.id" cols="12" sm="6">
             <v-flex class="d-flex flex-column align-center justify-center pa-6 ma-4" style="min-width: 400px">
 
@@ -56,12 +56,12 @@
           </v-col>
         </v-row>
 
-        <v-flex class="d-flex align-center justify-center flex-row mt-4">
+        <v-flex class="d-flex align-center justify-center flex-row mt-4 animated fadeInDown" style="animation-delay:1.0s">
           <v-icon medium>mdi-navigation</v-icon>
           <span class="font-weight-medium px-2" style="font-size: 26px">其他</span>
         </v-flex>
 
-        <v-card-text>
+        <v-card-text class="animated fadeInDown" style="animation-delay:1.1s">
           <!--<markdown :mdValuesP="content" :fullPageStatusP="false" :editStatusP="false"
                     :previewStatusP="true"
                     :navStatusP="false" :icoStatusP="false">

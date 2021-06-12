@@ -30,7 +30,8 @@
       </v-container>
 
       <v-timeline v-else :dense="$vuetify.breakpoint.smAndDown" v-for="(item,index) in lines" :key="item.id">
-        <v-timeline-item :color="colorList[index]"  fill-dot :left="index%2!==0" :right="index%2===0" :small="index%2===0">
+        <v-timeline-item :color="colorList[index]"  fill-dot :left="index%2!==0" :right="index%2===0" :small="index%2===0"
+                         class="ma-2 animated fadeInDown" :style="[{'animation-delay': (index + 1)*0.1 + 's'}]">
           <template v-slot:opposite>
             <p :style="[{'color': colorList[index]}]">{{item.createAt}}</p>
           </template>

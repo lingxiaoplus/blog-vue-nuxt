@@ -27,7 +27,8 @@
             <v-col cols="12" sm="6" md="4" lg="6">
               <v-sheet elevation="2" class="pa-2">
                 <v-chip-group column>
-                  <v-chip v-for="(tag,index) in tags" :key="tag.id" dark :color="colorList[index]" label class="ma-2">
+                  <v-chip v-for="(tag,index) in tags" :key="tag.id" dark :color="colorList[index]" label
+                          class="ma-2 animated fadeInDown" :style="[{'animation-delay': (index + 1)*0.1 + 's'}]">
                     {{ tag.name }}
                   </v-chip>
                 </v-chip-group>
@@ -39,7 +40,7 @@
       </v-card>
 
 
-      <v-card class="overflow-hidden" tile :elevation="0">
+      <v-card class="overflow-hidden animated fadeInDown" tile :elevation="0">
         <v-card-text>
           <div ref="cloud" style="width: 100%;height:300px"></div>
         </v-card-text>

@@ -15,7 +15,7 @@
 
     <v-row no-gutters v-else>
       <v-col v-for="(item,index) in items" :key="item.title" cols="12" sm="3">
-        <v-card class="ma-2" elevation="4" dark :color="colorList[index]">
+        <v-card class="ma-2 animated fadeInDown" :style="[{'animation-delay': (index + 1)*0.1 + 's'}]" elevation="4" dark :color="colorList[index]">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
               <v-card-title class="headline" v-text="item.name"></v-card-title>
@@ -31,7 +31,7 @@
       </v-col>
     </v-row>
 
-    <v-card tile elevation="0">
+    <v-card tile elevation="0" class="animated fadeInDown">
       <v-card-title>交换要求</v-card-title>
       <v-card-text>
         交换前请先行加上本博链接。仅交换内页，首页仅根据个人喜好添加。

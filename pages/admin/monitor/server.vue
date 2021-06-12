@@ -3,7 +3,7 @@
     <v-row>
 
       <v-col cols="6">
-        <v-card class="ma-4" tile max-height="350px">
+        <v-card class="ma-4 animated fadeInDown" style="animation-delay: 0.1s" tile max-height="350px">
           <v-card-title>状态</v-card-title>
           <v-card-actions>
             <v-flex class="d-flex flex-row">
@@ -70,7 +70,7 @@
       </v-col>
 
       <v-col cols="6">
-        <v-card class="ma-4" tile>
+        <v-card tile class="ma-4 animated fadeInDown" style="animation-delay: 0.2s">
           <v-card-title>jvm信息</v-card-title>
           <v-card-actions>
             <v-list flat>
@@ -137,7 +137,7 @@
 
 
       <v-col cols="6">
-        <v-card class="ma-4" tile>
+        <v-card tile class="ma-4 animated fadeInDown" style="animation-delay: 0.3s">
           <v-card-title>jvm负载</v-card-title>
           <v-card-actions>
             <v-flex class="px2 align-center justify-center">
@@ -148,7 +148,7 @@
       </v-col>
 
       <v-col cols="6">
-        <v-card class="ma-4" tile>
+        <v-card tile class="ma-4 animated fadeInDown" style="animation-delay: 0.4s">
           <v-card-title>cpu温度</v-card-title>
           <v-card-actions>
             <v-flex class="px2 align-center justify-center">
@@ -161,7 +161,7 @@
 
     <v-row>
       <v-col cols="12">
-        <v-card class="ma-4" tile>
+        <v-card tile class="ma-4 animated fadeInDown" style="animation-delay: 0.5s">
           <v-card-title>jvm堆内存</v-card-title>
           <v-card-actions>
             <v-flex class="px2 align-center justify-center">
@@ -180,7 +180,7 @@
 
     <v-row>
       <v-col cols="6">
-        <v-card class="ma-4" tile>
+        <v-card tile class="ma-4 animated fadeInDown" style="animation-delay: 0.6s">
           <v-card-text class="px2">
             <div ref="line" style="width: 100%;height:350px"></div>
           </v-card-text>

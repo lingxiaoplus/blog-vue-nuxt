@@ -17,7 +17,7 @@
 
     <v-sheet v-else>
       <v-flex class="d-flex flex-column align-center justify-center">
-        <v-carousel cycle interval="4000" height="600px">
+        <v-carousel cycle interval="4000" height="600px" class="animated fadeInDown">
           <v-carousel-item v-for="(item,i) in banners" :key="i" :src="item.headImage" @click="readArticle(item.id)">
             <v-flex class="d-flex align-center justify-center" style="width: 100%;height: 100%">
               <v-flex class="d-flex align-center justify-center flex-column">
@@ -29,11 +29,11 @@
             </v-flex>
           </v-carousel-item>
         </v-carousel>
-        <v-flex class="d-flex align-center justify-center flex-row mt-4">
+        <v-flex class="d-flex align-center justify-center flex-row mt-4 animated fadeInDown" style="animation-delay:0.1s">
           <v-icon medium>mdi-lightbulb-on-outline</v-icon>
           <span class="font-weight-medium px-2" style="font-size: 26px">每日一句</span>
         </v-flex>
-        <v-card elevation="0" max-width="800px" class="ma-2">
+        <v-card elevation="0" max-width="800px" class="ma-2 animated fadeInDown" style="animation-delay:0.2s">
           <v-card-text>
             <span class="font-weight-medium px-2" style="font-size: 20px">
               {{hitokoto.hitokoto}}
@@ -46,15 +46,15 @@
           </v-card-actions>
         </v-card>
 
-        <v-flex class="d-flex align-center justify-center flex-row mt-4">
+        <v-flex class="d-flex align-center justify-center flex-row mt-4 animated fadeInDown" style="animation-delay:0.3s">
           <v-icon medium>mdi-gift-outline</v-icon>
           <span class="font-weight-medium px-2" style="font-size: 26px">我的文章</span>
         </v-flex>
         <v-flex>
           <v-row class="px-6">
-            <v-col v-for="item in articleList" :key="item.id" md="4" sm="12" xs="2">
+            <v-col v-for="(item,index) in articleList" :key="item.id" md="4" sm="12" xs="2">
               <v-hover v-slot:default="{ hover }">
-                <v-card class="ma-2" :elevation="hover?10:2">
+                <v-card class="ma-2 animated fadeInDown" :style="[{'animation-delay': (index + 1)*0.1 + 's'}]" :elevation="hover?10:2">
                   <v-img :src="item.headImage + image_720p_suffix" height="194" @click="readArticle(item.id)">
                     <v-card-title style="position: absolute;bottom: 0px;color: white">{{item.title}}</v-card-title>
 
