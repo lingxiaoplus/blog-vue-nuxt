@@ -47,7 +47,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app :color="darkMode?'':'primary'" dark>
       <!-- loading条 -->
       <v-progress-linear @setLoading="setLoadingState" :active="this.$store.getters.getLoadingState"
                          :indeterminate="this.$store.getters.getLoadingState" absolute bottom background-color="white"
@@ -167,7 +167,8 @@ export default {
     },
     items: [],
     lightOrDarkIcon: 'mdi-brightness-6',
-    primaryColor: '#424242'
+    primaryColor: '#424242',
+    darkMode: false
   }),
   computed: {
     /*items() {
@@ -195,6 +196,7 @@ export default {
         this.lightOrDarkIcon = 'mdi-brightness-4'
         this.$vuetify.theme.dark = true
         this.primaryColor = '#424242'
+        this.darkMode = true
       } else {
         this.lightOrDarkIcon = 'mdi-brightness-6'
         let themeCache = localStorage.getItem('theme_style')
@@ -202,6 +204,7 @@ export default {
         this.$vuetify.theme.dark = false
         this.$vuetify.theme.themes.light.primary = themeStyle.color
         this.primaryColor = themeStyle.color
+        this.darkMode = false
       }
 
     },
