@@ -228,7 +228,7 @@
           //this.$vuetify.theme.themes.light.primary = themeStyle.color
           this.darkMode = false
         }
-
+        localStorage.setItem("darkMode",this.darkMode)
       },
       menuClick(item) {
         this.$router.push(item.url)
@@ -294,6 +294,8 @@
       if (hours > 19) {
         this.lightOrDarkIcon = 'mdi-brightness-4'
         this.$vuetify.theme.dark = true
+        this.darkMode = true
+        localStorage.setItem("darkMode",this.darkMode)
       } else {
         this.getTheme()
       }
