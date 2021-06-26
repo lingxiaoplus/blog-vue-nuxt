@@ -313,7 +313,7 @@ export default {
       this.$router.push('/user/login')
     }).finally(()=>{
       let darkMode = localStorage.getItem("darkMode")
-      if (darkMode){
+      if (darkMode && darkMode === true){
         this.lightOrDarkIcon = 'mdi-brightness-4'
         this.$vuetify.theme.dark = true
         this.primaryColor = '#424242'
