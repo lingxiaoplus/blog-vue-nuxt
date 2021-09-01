@@ -27,4 +27,7 @@
   .v-leave-active{
     transition: 0.5s;
   }
+  .v-btn {
+    text-transform: none;
+  }
 </style>

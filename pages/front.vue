@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar color="primary" dark app>
+    <v-app-bar :color="darkMode?'':'primary'" dark app>
       <!-- loading条 -->
       <v-progress-linear :active="this.$store.getters.getLoadingState"
                          :indeterminate="this.$store.getters.getLoadingState" absolute bottom background-color="white"
@@ -21,7 +21,8 @@
 
       <nuxt-link v-for="item in drawerList" :key="item.path" :to="item.path">
         <v-btn
-          color="primary" large depressed
+          :color="darkMode?'':'primary'"
+          large depressed
           class="white--text"
         >
           <v-icon left dark>{{item.icon}}</v-icon>
@@ -63,10 +64,9 @@
     </v-main>
 
     <v-footer app dark fixed padless absolute>
-      <v-card
-        flat
-        tile
-        class="primary lighten-1 white--text text-center" style="width: 100%;"
+      <v-card flat tile
+              :color="darkMode?'':'primary'"
+              class="lighten-1 white--text text-center" style="width: 100%;"
       >
         <v-card-text>
           <v-btn v-for="icon in footerIcon" :key="icon.path" class="mx-4 white--text" icon
@@ -191,6 +191,7 @@
         colorBall: '',
         params: '',
         loading: false,
+        darkMode: false
       }
     },
     head() {
@@ -218,14 +219,16 @@
         if (this.lightOrDarkIcon === 'mdi-brightness-6') {
           this.lightOrDarkIcon = 'mdi-brightness-4'
           this.$vuetify.theme.dark = true
+          this.darkMode = true
         } else {
           this.lightOrDarkIcon = 'mdi-brightness-6'
           let themeCache = localStorage.getItem('theme_style')
           let themeStyle = JSON.parse(themeCache)
           this.$vuetify.theme.dark = false
-          this.$vuetify.theme.themes.light.primary = themeStyle.color
+          //this.$vuetify.theme.themes.light.primary = themeStyle.color
+          this.darkMode = false
         }
-
+        localStorage.setItem("darkMode",this.darkMode)
       },
       menuClick(item) {
         this.$router.push(item.url)
@@ -291,6 +294,8 @@
       if (hours > 19) {
         this.lightOrDarkIcon = 'mdi-brightness-4'
         this.$vuetify.theme.dark = true
+        this.darkMode = true
+        localStorage.setItem("darkMode",this.darkMode)
       } else {
         this.getTheme()
       }

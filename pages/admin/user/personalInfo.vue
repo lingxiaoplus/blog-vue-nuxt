@@ -1,14 +1,15 @@
 <template>
-  <v-flex class="px-2">
-    <v-row>
-      <v-col clos="2">
-        <v-card tile elevation="6">
+  <v-container>
+  <v-flex class='d-flex column'>
+
+      <v-col md="4">
+        <v-card tile elevation="2">
           <v-img src="https://source.unsplash.com/random/600x400" height="194" class="header">
             <v-list-item align="center">
               <v-list-item-content>
                 <v-avatar size="60">
-                  <img :src="user_info.headPortrait?user_info.headPortrait:'https://cdn.vuetifyjs.com/images/john.jpg'"
-                       alt="John">
+                  <img :src="user_info.headPortrait?user_info.headPortrait:'https://blog-1252348761.cos.ap-chengdu.myqcloud.com/image/dog.gif'"
+                       alt="凌霄">
                 </v-avatar>
                 <v-list-item-title class="headline white--text">{{user_info.nickname}}</v-list-item-title>
                 <v-list-item-subtitle class="white--text">习惯沉默而不停止思考，无力表达却不曾失去态度</v-list-item-subtitle>
@@ -87,57 +88,60 @@
 
 
       </v-col>
-      <v-col cols="7">
-        <v-card tile elevation="6">
-          <v-tabs v-model="tablemodel">
-            <v-tab v-for="item in tables" :key="item.name">
-              {{ item.name }}
-            </v-tab>
+      <v-col md="8">
+        <v-card tile elevation="0">
+          <v-card-text>
+            <v-tabs v-model="tablemodel" align-with-title center-active centered grow>
+              <v-tabs-slider color="primary"></v-tabs-slider>
+              <v-tab v-for="item in tables" :key="item.name">
+                {{ item.name }}
+              </v-tab>
+            </v-tabs>
+          </v-card-text>
 
-            <v-tabs-items v-model="tablemodel">
-              <v-tab-item>
-                <v-flex class="d-flex flex-column mx-6">
-                  <v-text-field style="max-width: 260px" label="昵称 (不作为登录使用)"
-                                v-model="user_info.nickname"></v-text-field>
-                  <v-text-field style="max-width: 260px" label="手机号"></v-text-field>
+          <v-tabs-items v-model="tablemodel">
+            <v-tab-item>
+              <v-flex class="d-flex flex-column">
+                <v-text-field  label="昵称 (不作为登录使用)"
+                              v-model="user_info.nickname"></v-text-field>
+                <v-text-field  label="手机号"></v-text-field>
+                <v-text-field label="个人签名">
+                </v-text-field>
 
-                  <v-flex class="d-flex flex-row" style="align-items: center">
-                    <v-list-item-action-text style="font-size: 16px;margin-right: 10px">性别:</v-list-item-action-text>
-                    <v-radio-group v-model="sex" row style="max-width: 260px">
-                      <v-radio label="男" value="0" color="primary"></v-radio>
-                      <v-radio label="女" value="1" color="primary"></v-radio>
-                      <v-radio label="未知" value="2" color="primary"></v-radio>
-                    </v-radio-group>
-                  </v-flex>
-
-                  <v-btn color="primary" tile small max-width="100px" class="mb-4">保存配置</v-btn>
+                <v-flex class="d-flex flex-row" style="align-items: center">
+                  <v-list-item-action-text style="font-size: 16px;margin-right: 10px">性别:</v-list-item-action-text>
+                  <v-radio-group v-model="sex" row style="max-width: 260px">
+                    <v-radio label="男" value="0" color="primary"></v-radio>
+                    <v-radio label="女" value="1" color="primary"></v-radio>
+                    <v-radio label="未知" value="2" color="primary"></v-radio>
+                  </v-radio-group>
                 </v-flex>
-              </v-tab-item>
-              <v-tab-item>
 
-                <v-data-table :headers="headers" :items="logList" :page.sync="pageNum" :items-per-page="itemsPerPage"
-                              hide-default-footer class="elevation-1">
-                  <template v-slot:no-data>
-                    <v-btn color="primary">没有数据</v-btn>
-                  </template>
-                </v-data-table>
+                <v-btn color="primary" tile block>保存配置</v-btn>
+              </v-flex>
+            </v-tab-item>
+            <v-tab-item>
 
-                <div class="text-center pt-2" v-if="pageCount > 1">
-                  <v-pagination v-model="pageNum" :length="pageCount" :total-visible="7"></v-pagination>
-                </div>
-              </v-tab-item>
+              <v-data-table :headers="headers" :items="logList" :page.sync="pageNum" :items-per-page="itemsPerPage"
+                            hide-default-footer class="elevation-1">
+                <template v-slot:no-data>
+                  <v-btn color="primary">没有数据</v-btn>
+                </template>
+              </v-data-table>
+
+              <div class="text-center pt-2" v-if="pageCount > 1">
+                <v-pagination v-model="pageNum" :length="pageCount" :total-visible="7"></v-pagination>
+              </div>
+            </v-tab-item>
 
 
-            </v-tabs-items>
-
-
-          </v-tabs>
+          </v-tabs-items>
         </v-card>
       </v-col>
 
-    </v-row>
-  </v-flex>
 
+  </v-flex>
+  </v-container>
 </template>
 
 <script>

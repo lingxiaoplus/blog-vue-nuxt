@@ -11,7 +11,7 @@
       <v-list dense>
         <v-list-item>
           <v-avatar size="40">
-            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
+            <img src="https://blog-1252348761.cos.ap-chengdu.myqcloud.com/image/dog.gif" alt="凌霄">
           </v-avatar>
           <v-list-item-content>
             <v-list-item-title style="margin-left: 20px;">{{ user_name }}</v-list-item-title>
@@ -47,7 +47,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app :color="darkMode?'':'primary'" dark>
       <!-- loading条 -->
       <v-progress-linear @setLoading="setLoadingState" :active="this.$store.getters.getLoadingState"
                          :indeterminate="this.$store.getters.getLoadingState" absolute bottom background-color="white"
@@ -167,7 +167,8 @@ export default {
     },
     items: [],
     lightOrDarkIcon: 'mdi-brightness-6',
-    primaryColor: '#424242'
+    primaryColor: '#424242',
+    darkMode: false
   }),
   computed: {
     /*items() {
@@ -195,15 +196,17 @@ export default {
         this.lightOrDarkIcon = 'mdi-brightness-4'
         this.$vuetify.theme.dark = true
         this.primaryColor = '#424242'
+        this.darkMode = true
       } else {
         this.lightOrDarkIcon = 'mdi-brightness-6'
         let themeCache = localStorage.getItem('theme_style')
         let themeStyle = JSON.parse(themeCache)
         this.$vuetify.theme.dark = false
-        this.$vuetify.theme.themes.light.primary = themeStyle.color
-        this.primaryColor = themeStyle.color
+        //this.$vuetify.theme.themes.light.primary = themeStyle.color
+        //this.primaryColor = themeStyle.color
+        this.darkMode = false
       }
-
+      localStorage.setItem("darkMode",this.darkMode)
     },
     menuClick(item) {
       switch (item.action) {
@@ -308,6 +311,14 @@ export default {
       this.loading = false
       console.log('登录失败', e)
       this.$router.push('/user/login')
+    }).finally(()=>{
+      let darkMode = localStorage.getItem("darkMode")
+      if (darkMode && darkMode === true){
+        this.lightOrDarkIcon = 'mdi-brightness-4'
+        this.$vuetify.theme.dark = true
+        this.primaryColor = '#424242'
+        this.darkMode = true
+      }
     })
     this.getMenuData()
   }

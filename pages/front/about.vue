@@ -3,7 +3,7 @@
     <v-sheet>
       <v-flex class="d-flex flex-column align-center justify-center">
         <v-avatar size="160" class="animated fadeInDown" style="animation-delay:0.1s">
-          <img src="https://blog-1252348761.cos.ap-chengdu.myqcloud.com/image/dog.gif">
+          <img src="https://blog-1252348761.cos.ap-chengdu.myqcloud.com/image/dog.gif" alt='凌霄'>
         </v-avatar>
         <p class="text-h4 font-weight-medium ma-2 animated fadeInDown" style="animation-delay:0.2s">凌霄</p>
         <p class="text-h6 font-weight-medium animated fadeInDown" style="animation-delay:0.3s">java开发工程师</p>

@@ -437,6 +437,9 @@
 
       }
     },
+    beforeDestroy() {
+      localStorage.removeItem('articleContent')
+    },
     mounted() {
       let date = new Date()
       let hours = date.getHours()
@@ -451,6 +454,15 @@
       this.qr_content = href
       let tmpUrlSearch = window.location.search
       let tmpParas = GetRequestParameters(tmpUrlSearch)
+      let preview = tmpParas['preview']
+      if (preview){
+        this.loading = false
+        let articleContent = localStorage.getItem("articleContent")
+        this.article = JSON.parse(articleContent)
+        return
+      }
+
+
       let id = tmpParas['id'] //提取code参数, 用于获取openid
       this.articleId = id
       this.commentData.articleId = id;
