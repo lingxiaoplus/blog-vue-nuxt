@@ -96,3 +96,8 @@ $ npm run generate
 ```
 
 
+
+修改后台地址
+
+在/plugins/axios.js文件中，将域名修改为你的域名即可，后端部署请看[blog](https://github.com/lingxiaoplus/blog.git)。
+

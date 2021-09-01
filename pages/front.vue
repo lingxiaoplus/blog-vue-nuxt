@@ -11,7 +11,7 @@
           <img src="../assets/ic_launcher_round.png" alt="John">
         </v-avatar>
       </v-app-bar-nav-icon>
-      <v-toolbar-title>凌霄的博客</v-toolbar-title>
+      <v-toolbar-title>学习的岁月</v-toolbar-title>
       <v-spacer/>
 
       <v-row align="center" style="max-width: 400px" v-if="showSearch">
@@ -82,7 +82,7 @@
         <v-divider></v-divider>
 
         <v-card-text class="white--text">
-          <v-btn @click="onFooterClick('https://beian.miit.gov.cn/','')" text>蜀ICP备16028578号</v-btn>
+          <v-btn @click="onFooterClick('https://beian.miit.gov.cn/','')" text>蜀ICP备16028578号-2</v-btn>
           Copyright © 2018 - {{ new Date().getFullYear() }} — <strong> lingxiao | Powered by vuetify</strong>
         </v-card-text>
       </v-card>
